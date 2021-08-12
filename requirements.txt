@@ -1,4 +1,4 @@
-flake8
-isort
-pylint
-black
+flake8==3.9.2
+isort==5.9.3
+pylint==2.9.6
+black==21.7b0
