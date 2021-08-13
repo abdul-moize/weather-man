@@ -1,2 +1,4 @@
 [MESSAGES CONTROL]
 disable=F0001
+[MASTER]
+ignore=venv/, .idea/
