@@ -36,7 +36,7 @@ jobs:
         isort . -c
     - name: Lint with Pylint
       run: |
-        pylint *.py */*.py
+        pylint *.py */.py */*/*.py
     - name: Lint with black
       run: |
         black --check .
