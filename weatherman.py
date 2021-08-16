@@ -18,7 +18,7 @@ def main():
     Returns:
         None
     """
-    allowed_parameters = ":e:a:"
+    allowed_parameters = ":e:a:c:"
     parameters, args = getopt.getopt(sys.argv[1:], allowed_parameters)
     if args:
         path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
