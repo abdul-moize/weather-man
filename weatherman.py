@@ -1,5 +1,5 @@
 """
-Weatherman is a software that generates reports about the past weather of murree
+weatherman is a software that generates reports about the past weather of murree
 """
 import getopt
 import re
