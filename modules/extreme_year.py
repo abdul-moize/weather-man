@@ -40,9 +40,9 @@ def read_and_calculate_extremes(pattern, path):
     indexes = [1, 3, 7]
     for i in files:
         with open(i, "r") as file:
-            lines = file.readlines()
             # skip first line as it contains field names
-            for line in lines[1:]:
+            file.readline()
+            for line in file:
                 # since readline() returns 'linedata\n' with split by '\n' to get ['linedata','\n]
                 # then we get 'linedata' by grabbing the [0]
                 # lastly,  we split by ',' to get the entries parsed
