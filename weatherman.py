@@ -53,6 +53,7 @@ def main():
             i = 0
             continue
         i += 2
+        print()
 
 
 if __name__ == "__main__":
