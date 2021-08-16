@@ -7,22 +7,21 @@ import glob
 
 def read_and_calculate_averages(pattern, path):
     """
-        this function reads all the files at the given path which contain the given pattern
-        from each file that matches the pattern finds the following:
-        1. avg highest temperature
-        2. avg lowest temperature
-        3. avg mean humidity
-        :param pattern: a string which contains a year/month e.g '2006/5', '2007/3'
-        :param path: a string which contains path to a directory containing weather files
-        :return: a list of length 3, averages where
-        averages[0] = avg_highest_temperature
-        averages[1] = avg_lowest_temperature
-        averages[2] = avg_mean_humidity
-        """
+    this function reads all the files at the given path which contain the given pattern
+    from each file that matches the pattern finds the following:
+    1. avg highest temperature
+    2. avg lowest temperature
+    3. avg mean humidity
+    :param pattern: a string which contains a year/month e.g '2006/5', '2007/3'
+    :param path: a string which contains path to a directory containing weather files
+    :return: a list of length 3, averages where
+    averages[0] = avg_highest_temperature
+    averages[1] = avg_lowest_temperature
+    averages[2] = avg_mean_humidity
+    """
     files = glob.glob(path + f"*{pattern}*.txt")
     if not files:
-        print(f"We don't have information"
-              f" regarding {pattern}")
+        print(f"We don't have information" f" regarding {pattern}")
         return -1
     # entries of the month
     entries = 0
@@ -45,11 +44,11 @@ def read_and_calculate_averages(pattern, path):
                 parsed_line = j.split("\n")[0].split(",")
                 entries += 1
                 for k, val in enumerate(indexes):
-                    if parsed_line[val] == '':
+                    if parsed_line[val] == "":
                         continue
                     sums[k] += int(parsed_line[val])
 
-    return [i/entries for i in sums]
+    return [i / entries for i in sums]
 
 
 def generate_averages_report_month(averages):
@@ -64,7 +63,7 @@ def generate_averages_report_month(averages):
         averages[2] = avg_mean_humidity
     :return: nothing
     """
-    value = ['Highest', 'Lowest', 'Mean Humidity']
+    value = ["Highest", "Lowest", "Mean Humidity"]
     units = ["C", "C", "%"]
     for i, val in enumerate(value):
         print(f"Average {val}: {averages[i]}{units[i]}")
@@ -91,9 +90,9 @@ def get_averages_month(month, path):
         "Sep",
         "Oct",
         "Nov",
-        "Dec"
+        "Dec",
     ]
-    month = number_to_month[int(month.split('/')[1])-1]
+    month = number_to_month[int(month.split("/")[1]) - 1]
     averages = read_and_calculate_averages(month, path)
     if averages == -1:
         return -1
