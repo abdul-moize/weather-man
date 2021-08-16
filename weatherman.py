@@ -20,16 +20,17 @@ def main():
     i = 0
     path = ""
     while i < len(parameters):
-        path = "weatherfiles/"
-        if len(parameters) < 2:
-            parameters = input(
-                "Too less options."
-                ' make sure command is like: "path flag date" path is optional'
-            )
-            i = 0
-            continue
-        if parameters[0][0] != "-" and len(parameters) >= 3:
-            path, parameters = parameters[0], parameters[1:]
+        if path == "":
+            path = "weatherfiles/"
+            if len(parameters) < 2:
+                parameters = input(
+                    "Too less options."
+                    ' make sure command is like: "path flag date" path is optional'
+                )
+                i = 0
+                continue
+            if parameters[0][0] != "-" and len(parameters) >= 3:
+                path, parameters = parameters[0], parameters[1:]
         valid_flag = False
         handler = flag_handler[0]
         j = 0
@@ -43,6 +44,7 @@ def main():
                 f"Invalid Flag '{parameters[i]}'. " f"Please enter a valid command: "
             ).split(" ")
             i = 0
+            path = ""
             continue
         if re.match(accepted_regex[j], parameters[i + 1]):
             handler(parameters[i + 1], path)
@@ -51,6 +53,7 @@ def main():
                 f"Invalid date '{parameters[i+1]}'. " f"Please enter a valid command: "
             ).split(" ")
             i = 0
+            path = ""
             continue
         i += 2
         print()

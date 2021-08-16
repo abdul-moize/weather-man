@@ -21,7 +21,7 @@ def read_and_calculate_averages(pattern, path):
     """
     files = glob.glob(path + f"*{pattern}*.txt")
     if not files:
-        print(f"We don't have information" f" regarding {pattern}")
+        print(f"We don't have information" f" regarding the given month {pattern}")
         return -1
     # entries of the month
     entries = 0
