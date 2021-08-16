@@ -98,3 +98,4 @@ def get_averages_month(month, path):
     if averages == -1:
         return -1
     generate_averages_report_month(averages)
+    return 0
