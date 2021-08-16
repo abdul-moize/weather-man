@@ -2,6 +2,7 @@
 Weatherman is a software that generates reports about the past weather of murree
 """
 import getopt
+import re
 import sys
 
 from constants import WEATHER_FILES_DIR
@@ -11,7 +12,6 @@ from modules.validators import is_year, is_year_month
 
 
 def main():
-
     """
     The driver function for weatherman.
     Returns:

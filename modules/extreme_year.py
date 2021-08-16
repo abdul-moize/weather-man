@@ -15,7 +15,7 @@ from modules.validators import is_year
 def calculate_extremes(year, path):
     """
     This function reads all the files at the given path which contain the given pattern
-    from each file that matches the pattern finds the following:
+    given year along with the most humid day.
     1. max highest temperature
     2. max lowest temperature
     3. max humidity
