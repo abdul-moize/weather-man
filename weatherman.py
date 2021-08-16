@@ -21,7 +21,7 @@ def main():
         path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
     iteration = 0
     accepted_flags = ["-e", "-a"]
-    accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}"]
+    accepted_regex = [r"\d{4}", r"\d{4}/(0[1-9]|1[012]|[1-9])"]
     flag_handler = [extreme_temperatures_year, get_averages_month]
     path = ""
     while iteration < len(parameters):
