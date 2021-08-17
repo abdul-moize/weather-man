@@ -6,6 +6,7 @@ from modules.utils import (
     get_highest_temperature,
     get_lowest_temperature,
     get_mean_humidity,
+    number_to_month,
     read_data,
 )
 
@@ -81,20 +82,7 @@ def get_averages_month(month, path):
     Returns:
         None
     """
-    number_to_month = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
+
     temp = month.split("/")
     month = temp[0] + "_" + number_to_month[int(temp[1]) - 1]
     averages = calculate_averages(month, path)

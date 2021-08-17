@@ -7,6 +7,7 @@ import sys
 
 import constants
 from modules.average_month import get_averages_month
+from modules.charts_month import charts_month
 from modules.extreme_year import extreme_temperatures_year
 
 
@@ -16,13 +17,14 @@ def main():
     Returns:
         None
     """
-    parameters, args = getopt.getopt(sys.argv[1:], ":e:a:")
+    allowed_parameters = ":e:a:c:"
+    parameters, args = getopt.getopt(sys.argv[1:], allowed_parameters)
     if args:
-        path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+        path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
     iteration = 0
-    accepted_flags = ["-e", "-a"]
-    accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}"]
-    flag_handler = [extreme_temperatures_year, get_averages_month]
+    accepted_flags = ["-e", "-a", "-c"]
+    accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}", r"\d{4}/\d{1,2}"]
+    flag_handler = [extreme_temperatures_year, get_averages_month, charts_month]
     path = constants.WEATHER_FILES_DIR
     while iteration < len(parameters):
         if len(parameters) < 1:
@@ -33,9 +35,12 @@ def main():
             )
             iteration = 0
             path = constants.WEATHER_FILES_DIR
-            parameters, args = getopt.getopt(parameters, ":e:a:")
+            parameters, args = getopt.getopt(parameters, allowed_parameters)
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             continue
         valid_flag = False
         handler = flag_handler[0]
@@ -48,10 +53,13 @@ def main():
                 f"Invalid Flag '{parameters[iteration][0]}'. "
                 f"Please enter a valid command: "
             ).split(" ")
-            parameters, args = getopt.getopt(parameters, ":e:a:")
+            parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = constants.WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             iteration = 0
             continue
         if re.match(accepted_regex[j], parameters[iteration][1]):
@@ -61,10 +69,13 @@ def main():
                 f"Invalid date '{parameters[iteration][1]}'. "
                 f"Please enter a valid command: "
             ).split(" ")
-            parameters, args = getopt.getopt(parameters, ":e:a:")
+            parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = constants.WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             iteration = 0
             continue
         iteration += 1
