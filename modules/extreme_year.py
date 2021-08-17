@@ -5,32 +5,50 @@ given year along with the most humid day.
 import glob
 
 
-def read_and_calculate_extremes(pattern, path):
+def read_year_data(year, path):
+    """
+    this function reads data from the files of a particular year
+    :param year:
+    :param path:
+    :returns: generator object containing row of a file
+    """
+    files = glob.glob(path + f"*{year}*")
+    if not files:
+        print(
+            f"We don't have information regarding the "
+            f"year {year} in the given path"
+        )
+        return -1
+    for i in files:
+        with open(i, "r") as file:
+            # skip first line as it contains field names
+            file.readline()
+            for j in file:
+                yield j
+
+
+def calculate_extremes(year, path):
     """
     this function reads all the files at the given path which contain the given pattern
     from each file that matches the pattern finds the following:
     1. max highest temperature
     2. max lowest temperature
     3. max humidity
-    :param pattern: a string which contains a year e.g '2006', '2007'
+    :param year: a string which contains a year e.g '2006', '2007'
     :param path: a string which contains path to a directory containing weather files
-    :return: a 3x2 list maximums where
+    :returns: a 3x2 list maximums where
     maximums[0] = [max_highest_temperature, date]
     maximums[1] = [max_lowest_temperature, date]
     maximums[2] = [max_humidity, date]
     date here is a string like: '2002-4-1', '2004-3-14'
     """
-    files = glob.glob(path + f"*{pattern}*")
-    if not files:
-        print(
-            f"We don't have information regarding the "
-            f"year {pattern} in the given path"
-        )
-        return -1
-    # maximums[0] contains highest temperature and day
-    # maximums[1] contains lowest temperature and day
-    # maximums[2] contains most humidity and day
-    maximums = [[0, ""], [0, ""], [0, ""]]
+    # max_temperature contains highest temperature and
+    # date on which the temperature was highest
+    # min_temperature contains lowest temperature and date
+    # max_humidity contains most humidity and date
+    max_temperature = [0, ""]
+    min_temperature = [0, ""]
+    max_humidity = [0, ""]
     initialized = False
     # indexes to compare values with.
     # highest temperature is stored at index 1 of weather reading
@@ -38,34 +56,35 @@ def read_and_calculate_extremes(pattern, path):
     # max humidity is stored at index 7 of weather reading
     # see the weather files for further explanation
     indexes = [1, 3, 7]
-    for i in files:
-        with open(i, "r") as file:
-            # skip first line as it contains field names
-            file.readline()
-            for line in file:
-                # since readline() returns 'linedata\n' with split by '\n' to get ['linedata','\n]
-                # then we get 'linedata' by grabbing the [0]
-                # lastly,  we split by ',' to get the entries parsed
-                parsed_line = line.split("\n")[0].split(",")
-                if not initialized:
-                    for j, val in enumerate(indexes):
-                        maximums[j] = [int(parsed_line[val]), parsed_line[0]]
-                    initialized = True
-                    continue
-                for j, val in enumerate(indexes):
-                    # index of weather record to compare value of current maximum with
-                    index_to_compare = val
-                    # value of temperatures or humidity or none
-                    value = parsed_line[index_to_compare]
-                    if value == "":
-                        continue
-                    value = int(value)
-                    if j != 1 and value >= maximums[j][0]:
-                        maximums[j] = [value, parsed_line[0]]
-                    elif value <= maximums[j][0]:
-                        maximums[j] = [value, parsed_line[0]]
+    for line in read_year_data(year, path):
+        # since readline() returns 'linedata\n' with split by '\n' to get ['linedata','\n]
+        # then we get 'linedata' by grabbing the [0]
+        # lastly,  we split by ',' to get the entries parsed
+        parsed_line = line.split("\n")[0].split(",")
+        date = parsed_line[0]
+        if not initialized:
+            max_temperature = [int(parsed_line[indexes[0]]), date]
+            min_temperature = [int(parsed_line[indexes[1]]), date]
+            max_humidity = [int(parsed_line[indexes[2]]), date]
+            initialized = True
+            continue
 
-    return maximums
+        if parsed_line[indexes[0]] != '':
+            max_temperature_line = int(parsed_line[indexes[0]])
+            if max_temperature_line >= max_temperature[0]:
+                max_temperature = [max_temperature_line, date]
+
+        if parsed_line[indexes[1]] != '':
+            min_temperature_line = int(parsed_line[indexes[1]])
+            if min_temperature_line <= min_temperature[0]:
+                min_temperature = [min_temperature_line, date]
+
+        if parsed_line[indexes[2]] != '':
+            max_humidity_line = int(parsed_line[indexes[2]])
+            if max_humidity_line >= max_humidity[0]:
+                max_temperature = [max_humidity_line, date]
+
+    return [max_temperature, min_temperature, max_humidity] if initialized else -1
 
 
 def generate_extremes_report(maximums):
@@ -76,7 +95,7 @@ def generate_extremes_report(maximums):
     2. max_lowest_temperature with day
     3. max_humidity with day
     :param maximums:
-    :return: nothing
+    :returns: None
     """
     number_to_month = [
         "January",
@@ -92,12 +111,11 @@ def generate_extremes_report(maximums):
         "November",
         "December",
     ]
-    initial_message = ["Highest", "Lowest", "Humidity"]
-    unit = ["C", "C", "%"]
+    message_unit = [("Highest", "C"), ("Lowest", "C"), ("Humidity", "%")]
     for i, val in enumerate(maximums):
         month, day = maximums[i][1].split("-")[1:]
         print(
-            f"{initial_message[i]}: {str(val[0])}{unit[i]} "
+            f"{message_unit[i][0]}: {str(val[0])}{message_unit[i][1]} "
             f"on {number_to_month[int(month) - 1]} {day}"
         )
 
@@ -108,9 +126,9 @@ def extreme_temperatures_year(year, path):
     for a given year
     :param year: a string like: '2002', '2004', etc
     :param path: a string like: 'weatherfiles/'
-    :return: nothing
+    :returns: int 0 for success -1 for error
     """
-    maximums = read_and_calculate_extremes(year, path)
+    maximums = calculate_extremes(year, path)
     if maximums == -1:
         return -1
     generate_extremes_report(maximums)
