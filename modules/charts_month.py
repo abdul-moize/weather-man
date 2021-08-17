@@ -49,8 +49,8 @@ def generate_report_charts(extremes):
         if i[2] == -1000:
             i[2] = "No Entry"
 
-        print(f"{date} {red_plus} {i[1]}C")
-        print(f"{date} {blue_plus} {i[2]}C")
+        print(f"\33[0m{date} \33[94m{i[2]}C {blue_plus}", end="")
+        print(f"{red_plus} {i[1]}C")
 
 
 def charts_month(year_month, path):
