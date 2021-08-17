@@ -95,7 +95,8 @@ def get_averages_month(month, path):
         "Nov",
         "Dec",
     ]
-    month = number_to_month[int(month.split("/")[1]) - 1]
+    temp = month.split("/")
+    month = temp[0] + "_" + number_to_month[int(temp[1]) - 1]
     averages = calculate_averages(month, path)
     if averages == -1:
         return -1
