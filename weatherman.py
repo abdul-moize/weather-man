@@ -6,7 +6,8 @@ import re
 import sys
 
 import constants
-from modules.extreme_year import extreme_temperatures_year as t1
+from modules.extreme_year import extreme_temperatures_year
+from modules.average_month import get_averages_month
 
 
 def main():
@@ -18,10 +19,10 @@ def main():
     parameters, args = getopt.getopt(sys.argv[1:], ":e:a:")
     if args:
         path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
-    accepted_flags = ["-e"]
-    accepted_regex = [r"\d{4}"]
-    flag_handler = [t1]
     iteration = 0
+    accepted_flags = ["-e", "-a"]
+    accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}"]
+    flag_handler = [extreme_temperatures_year, get_averages_month]
     path = ""
     while iteration < len(parameters):
         if len(parameters) < 1:
@@ -67,6 +68,7 @@ def main():
             iteration = 0
             continue
         iteration += 1
+        print()
 
 
 if __name__ == "__main__":
