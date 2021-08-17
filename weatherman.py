@@ -23,7 +23,7 @@ def main():
     accepted_flags = ["-e", "-a"]
     accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}"]
     flag_handler = [extreme_temperatures_year, get_averages_month]
-    path = ""
+    path = constants.WEATHER_FILES_DIR
     while iteration < len(parameters):
         if len(parameters) < 1:
             parameters = input(
