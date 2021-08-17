@@ -1,5 +1,5 @@
 """
-this module will return the highest and lowest temperatures of a
+This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
 import glob
@@ -7,10 +7,12 @@ import glob
 
 def read_year_data(year, path):
     """
-    this function reads data from the files of a particular year
-    :param year:
-    :param path:
-    :returns: generator object containing row of a file
+    This function reads data from the files of a particular year
+    Args:
+        year(str): 4digit string like '2002', '2003', '2004', etc
+        path(str): like any path string 'weatherfile/', 'path/to/files', etc
+    Returns:
+        generator object containing row of a file or -1 if no file exists for a given year
     """
     files = glob.glob(path + f"*{year}*")
     if not files:
@@ -26,20 +28,60 @@ def read_year_data(year, path):
                 yield j
 
 
+def get_highest_temperature(line):
+    """
+    Returns the highest temperature from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+         highest_temperature(int): Value stored at index 1 of line is highest temperature
+    """
+    highest_temperature = int(line[1]) if line[1] != "" else -1000
+    return highest_temperature
+
+
+def get_lowest_temperature(line):
+    """
+    Returns the lowest temperature from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+          an int: either the lowest temperature or -1000 if there is no entry
+    """
+    return int(line[3]) if line[3] != "" else -1000
+
+
+def get_max_humidity(line):
+    """
+    Returns the maximum humidity from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+          an int: either the max humidity or -1000 if there is no entry
+    """
+    return int(line[7]) if line[7] != "" else -1000
+
+
 def calculate_extremes(year, path):
     """
-    this function reads all the files at the given path which contain the given pattern
+    This function reads all the files at the given path which contain the given pattern
     from each file that matches the pattern finds the following:
     1. max highest temperature
     2. max lowest temperature
     3. max humidity
-    :param year: a string which contains a year e.g '2006', '2007'
-    :param path: a string which contains path to a directory containing weather files
-    :returns: a 3x2 list maximums where
-    maximums[0] = [max_highest_temperature, date]
-    maximums[1] = [max_lowest_temperature, date]
-    maximums[2] = [max_humidity, date]
-    date here is a string like: '2002-4-1', '2004-3-14'
+    Args:
+        year: a string which contains a year e.g '2006', '2007'
+        path: a string which contains path to a directory containing weather files
+    Returns:
+           a 2d list or int: a 3x2 list maximums where
+                            maximums[0] = [max_highest_temperature, date]
+                            maximums[1] = [max_lowest_temperature, date]
+                            maximums[2] = [max_humidity, date]
+                            date here is a string like: '2002-4-1', '2004-3-14'
+                            or an int if there is an error or failure
     """
     # max_temperature contains highest temperature and
     # date on which the temperature was highest
@@ -68,18 +110,18 @@ def calculate_extremes(year, path):
             initialized = True
             continue
 
-        if parsed_line[indexes[0]] != "":
-            max_temperature_line = int(parsed_line[indexes[0]])
+        max_temperature_line = get_highest_temperature(parsed_line)
+        if max_temperature_line != -1000:
             if max_temperature_line >= max_temperature[0]:
                 max_temperature = [max_temperature_line, date]
 
-        if parsed_line[indexes[1]] != "":
-            min_temperature_line = int(parsed_line[indexes[1]])
+        min_temperature_line = get_lowest_temperature(parsed_line)
+        if min_temperature_line != -1000:
             if min_temperature_line <= min_temperature[0]:
                 min_temperature = [min_temperature_line, date]
 
-        if parsed_line[indexes[2]] != "":
-            max_humidity_line = int(parsed_line[indexes[2]])
+        max_humidity_line = get_max_humidity(parsed_line)
+        if max_humidity_line != -1000:
             if max_humidity_line >= max_humidity[0]:
                 max_temperature = [max_humidity_line, date]
 
@@ -88,13 +130,19 @@ def calculate_extremes(year, path):
 
 def generate_extremes_report(maximums):
     """
-    this functions prints/generates a report on the console based on the maximums array
-    the reports displays the following
-    1. max_highest_temperature with day
-    2. max_lowest_temperature with day
-    3. max_humidity with day
-    :param maximums:
-    :returns: None
+    This function prints/generates a report on the console based on the maximums list
+    the report displays the following
+    1. max_highest_temperature with date
+    2. max_lowest_temperature with date
+    3. max_humidity with date
+    Args:
+        maximums(2d list):  a 3x2 list every row contains a list like
+                            [value, date] value(int)  date(str) is like '2006-3-1'
+                            0 index contains [highest_temperature, date]
+                            1 index contains [lowest_temperature, date]
+                            2 index contains [max_humidity, date
+    Returns:
+        None
     """
     number_to_month = [
         "January",
@@ -121,11 +169,13 @@ def generate_extremes_report(maximums):
 
 def extreme_temperatures_year(year, path):
     """
-    this method uses two other methods to calculate max extreme temperatures and max humidity
+    This method uses two other methods to calculate max extreme temperatures and max humidity
     for a given year
-    :param year: a string like: '2002', '2004', etc
-    :param path: a string like: 'weatherfiles/'
-    :returns: int 0 for success -1 for error
+    Args:
+        year(str): a string like: '2002', '2004', etc
+        path(str): a string like: 'weatherfiles/'
+    Returns:
+        an int: 0 for success -1 for error
     """
     maximums = calculate_extremes(year, path)
     if maximums == -1:

@@ -11,7 +11,8 @@ from modules.extreme_year import extreme_temperatures_year as t1
 def main():
     """
     The driver function for weatherman.
-    :returns: None
+    Returns:
+        None
     """
     parameters, args = getopt.getopt(sys.argv[1:], ":e:a:")
     if args:
