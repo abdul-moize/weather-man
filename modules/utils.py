@@ -34,6 +34,4 @@ def read_data(year, path):
     for i in files:
         with open(i, "r") as file:
             # skip first line as it contains field names
-            file.readline()
-            for j in file:
-                yield j
+            yield file.readlines()[1:]

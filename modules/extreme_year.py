@@ -75,33 +75,35 @@ def calculate_extremes(year, path):
     # max humidity is stored at index 7 of weather reading
     # see the weather files for further explanation
     indexes = [1, 3, 7]
-    for line in read_data(year, path):
-        # since readline() returns 'linedata\n' with split by '\n' to get ['linedata','\n]
-        # then we get 'linedata' by grabbing the [0]
-        # lastly,  we split by ',' to get the entries parsed
-        parsed_line = line.split("\n")[0].split(",")
-        date = parsed_line[0]
-        if not initialized:
-            max_temperature = [int(parsed_line[indexes[0]]), date]
-            min_temperature = [int(parsed_line[indexes[1]]), date]
-            max_humidity = [int(parsed_line[indexes[2]]), date]
-            initialized = True
-            continue
+    for lines in read_data(year, path):
+        for line in lines:
+            # since readlines() returns ['linedata1\n','linedata2\n',...]
+            # line contains ['linedata\n'] with split by '\n' to get ['linedata','\n]
+            # then we get 'linedata' by grabbing the [0]
+            # lastly,  we split by ',' to get the entries parsed
+            parsed_line = line.split("\n")[0].split(",")
+            date = parsed_line[0]
+            if not initialized:
+                max_temperature = [int(parsed_line[indexes[0]]), date]
+                min_temperature = [int(parsed_line[indexes[1]]), date]
+                max_humidity = [int(parsed_line[indexes[2]]), date]
+                initialized = True
+                continue
 
-        max_temperature_line = get_highest_temperature(parsed_line)
-        if max_temperature_line != -1000:
-            if max_temperature_line >= max_temperature[0]:
-                max_temperature = [max_temperature_line, date]
+            max_temperature_line = get_highest_temperature(parsed_line)
+            if max_temperature_line != -1000:
+                if max_temperature_line >= max_temperature[0]:
+                    max_temperature = [max_temperature_line, date]
 
-        min_temperature_line = get_lowest_temperature(parsed_line)
-        if min_temperature_line != -1000:
-            if min_temperature_line <= min_temperature[0]:
-                min_temperature = [min_temperature_line, date]
+            min_temperature_line = get_lowest_temperature(parsed_line)
+            if min_temperature_line != -1000:
+                if min_temperature_line <= min_temperature[0]:
+                    min_temperature = [min_temperature_line, date]
 
-        max_humidity_line = get_max_humidity(parsed_line)
-        if max_humidity_line != -1000:
-            if max_humidity_line >= max_humidity[0]:
-                max_temperature = [max_humidity_line, date]
+            max_humidity_line = get_max_humidity(parsed_line)
+            if max_humidity_line != -1000:
+                if max_humidity_line >= max_humidity[0]:
+                    max_temperature = [max_humidity_line, date]
 
     return [max_temperature, min_temperature, max_humidity] if initialized else -1
 
