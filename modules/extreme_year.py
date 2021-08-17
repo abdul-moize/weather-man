@@ -15,10 +15,9 @@ def read_year_data(year, path):
     files = glob.glob(path + f"*{year}*")
     if not files:
         print(
-            f"We don't have information regarding the "
-            f"year {year} in the given path"
+            f"We don't have information regarding the " f"year {year} in the given path"
         )
-        return -1
+        yield -1
     for i in files:
         with open(i, "r") as file:
             # skip first line as it contains field names
@@ -69,17 +68,17 @@ def calculate_extremes(year, path):
             initialized = True
             continue
 
-        if parsed_line[indexes[0]] != '':
+        if parsed_line[indexes[0]] != "":
             max_temperature_line = int(parsed_line[indexes[0]])
             if max_temperature_line >= max_temperature[0]:
                 max_temperature = [max_temperature_line, date]
 
-        if parsed_line[indexes[1]] != '':
+        if parsed_line[indexes[1]] != "":
             min_temperature_line = int(parsed_line[indexes[1]])
             if min_temperature_line <= min_temperature[0]:
                 min_temperature = [min_temperature_line, date]
 
-        if parsed_line[indexes[2]] != '':
+        if parsed_line[indexes[2]] != "":
             max_humidity_line = int(parsed_line[indexes[2]])
             if max_humidity_line >= max_humidity[0]:
                 max_temperature = [max_humidity_line, date]
