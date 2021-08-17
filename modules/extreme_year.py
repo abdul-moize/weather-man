@@ -3,8 +3,12 @@ This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
 
-from modules.utils import (get_highest_temperature, get_lowest_temperature,
-                           get_max_humidity, read_data)
+from modules.utils import (
+    get_highest_temperature,
+    get_lowest_temperature,
+    get_max_humidity,
+    read_data,
+)
 
 
 def calculate_extremes(year, path):

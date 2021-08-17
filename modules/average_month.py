@@ -2,8 +2,12 @@
 This module generates a report which displays average highest and lowest temperature
 as well as average max humidity for a given month
 """
-from modules.utils import (get_highest_temperature, get_lowest_temperature,
-                           get_mean_humidity, read_data)
+from modules.utils import (
+    get_highest_temperature,
+    get_lowest_temperature,
+    get_mean_humidity,
+    read_data,
+)
 
 
 def calculate_averages(pattern, path):
