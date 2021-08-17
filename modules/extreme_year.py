@@ -2,30 +2,8 @@
 This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
-import glob
 
-
-def read_year_data(year, path):
-    """
-    This function reads data from the files of a particular year
-    Args:
-        year(str): 4digit string like '2002', '2003', '2004', etc
-        path(str): like any path string 'weatherfile/', 'path/to/files', etc
-    Returns:
-        generator object containing row of a file or -1 if no file exists for a given year
-    """
-    files = glob.glob(path + f"*{year}*")
-    if not files:
-        print(
-            f"We don't have information regarding the " f"year {year} in the given path"
-        )
-        yield -1
-    for i in files:
-        with open(i, "r") as file:
-            # skip first line as it contains field names
-            file.readline()
-            for j in file:
-                yield j
+from modules.utils import read_data
 
 
 def get_highest_temperature(line):
@@ -97,7 +75,7 @@ def calculate_extremes(year, path):
     # max humidity is stored at index 7 of weather reading
     # see the weather files for further explanation
     indexes = [1, 3, 7]
-    for line in read_year_data(year, path):
+    for line in read_data(year, path):
         # since readline() returns 'linedata\n' with split by '\n' to get ['linedata','\n]
         # then we get 'linedata' by grabbing the [0]
         # lastly,  we split by ',' to get the entries parsed
