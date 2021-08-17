@@ -40,17 +40,21 @@ def generate_report_charts(extremes):
     :param extremes:
     :return:
     """
-    for i in extremes:
-        date = i[0].split("-")[2]
-        red_plus = f"\33[91m{'+'*i[1]}"
-        blue_plus = f"\33[94m{'+'*i[2]}"
-        if i[1] == -1000:
-            i[1] = "No Entry"
-        if i[2] == -1000:
-            i[2] = "No Entry"
+    split = extremes[0][0].split("-")
+    month = int(split[1])
+    year = split[0]
+    print(number_to_month[month - 1] + " " + year)
+    for entry in extremes:
+        day = entry[0].split("-")[2]
+        red_plus = f"\33[91m{'+'*entry[1]}"
+        blue_plus = f"\33[94m{'+'*entry[2]}"
+        if entry[1] == -1000:
+            entry[1] = "No Entry"
+        if entry[2] == -1000:
+            entry[2] = "No Entry"
 
-        print(f"\33[0m{date} \33[94m{i[2]}C {blue_plus}", end="")
-        print(f"{red_plus} {i[1]}C")
+        print(f"\33[0m{day} \33[94m{entry[2]}C {blue_plus}", end="")
+        print(f"{red_plus} {entry[1]}C")
 
 
 def charts_month(year_month, path):
