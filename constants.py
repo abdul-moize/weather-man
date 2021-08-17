@@ -1,0 +1,1 @@
+WEATHER_FILES_DIR = "weatherfiles/"

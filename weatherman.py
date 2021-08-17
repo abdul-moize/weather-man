@@ -5,6 +5,7 @@ import getopt
 import re
 import sys
 
+import constants
 from modules.extreme_year import extreme_temperatures_year as t1
 
 
@@ -30,7 +31,7 @@ def main():
                 "path is optional"
             )
             iteration = 0
-            path = "weatherfiles/"
+            path = constants.WEATHER_FILES_DIR
             parameters, args = getopt.getopt(parameters, ":e:a:")
             if args:
                 path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
@@ -47,7 +48,7 @@ def main():
                 f"Please enter a valid command: "
             ).split(" ")
             parameters, args = getopt.getopt(parameters, ":e:a:")
-            path = "weatherfiles/"
+            path = constants.WEATHER_FILES_DIR
             if args:
                 path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
             iteration = 0
@@ -60,7 +61,7 @@ def main():
                 f"Please enter a valid command: "
             ).split(" ")
             parameters, args = getopt.getopt(parameters, ":e:a:")
-            path = "weatherfiles/"
+            path = constants.WEATHER_FILES_DIR
             if args:
                 path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
             iteration = 0
