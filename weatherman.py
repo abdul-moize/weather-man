@@ -6,8 +6,8 @@ import re
 import sys
 
 import constants
-from modules.extreme_year import extreme_temperatures_year
 from modules.average_month import get_averages_month
+from modules.extreme_year import extreme_temperatures_year
 
 
 def main():
