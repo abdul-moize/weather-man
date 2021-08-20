@@ -13,7 +13,7 @@ def get_highest_temperature(line):
         line(list): a list of strings containing different fields at different index
                     please have a look at any weatherfile for more clarity
     Returns:
-         (int or None): Value stored at index 1 of line is highest temperature
+         (int or None): highest temperature
                         OR
                         None if there is no entry
     """
@@ -31,7 +31,9 @@ def get_lowest_temperature(line):
         line(list): a list of strings containing different fields at different index
                     please have a look at any weatherfile for more clarity
     Returns:
-          (int or None): either the lowest temperature or None if there is no entry
+          (int or None):    lowest temperature
+                            OR
+                            None if there is no entry
     """
     try:
         return int(line[3])
@@ -46,7 +48,9 @@ def get_max_humidity(line):
         line(list): a list of strings containing different fields at different index
                     please have a look at any weatherfile for more clarity
     Returns:
-          (int or None): either the max humidity or None if there is no entry or wrong entry
+          (int or None):    max humidity
+                            Or
+                            None if there is no entry or wrong entry
     """
     try:
         return int(line[7])
@@ -62,8 +66,8 @@ def calculate_extremes(year, path):
     2. max lowest temperature
     3. max humidity
     Args:
-        year: a string which contains a year e.g '2006', '2007'
-        path: a string which contains path to a directory containing weather files
+        year(str): a value containing 4 digit year like: '2002', '2003'.
+        path(str): a value containing path like: 'weatherfiles/'
     Returns:
            (list or None):  a 3x2 list maximums where
                             maximums[0] = [max_highest_temperature, date]
@@ -167,13 +171,14 @@ def generate_extremes_report(maximums):
 
 def extreme_temperatures_year(year, path=constants.WEATHER_FILES_DIR):
     """
-    This method uses two other methods to calculate max extreme temperatures and max humidity
-    for a given year
+    Calculates extreme temperatures and max humidity for a given year
     Args:
-        year(str): a string like: '2002', '2004', etc
-        path(str): a string like: 'weatherfiles/'
+        year(str): a value containing 4 digit year like: '2002', '2003'.
+        path(str): a value containing path like: 'weatherfiles/'
     Returns:
-        (int or None): 0 for success None for error
+        (int or None):  0 for success
+                        Or
+                        None for error
     """
     maximums = calculate_extremes(year, path)
     if maximums is None:
