@@ -11,7 +11,9 @@ def pattern_search(pattern, path):
         pattern(str): a string which contains any pattern e.g '2006', '2007', '2005/6', etc
         path(str): a string which contains path to a directory containing weather files
     Returns:
-        a list: path to all the files matching the pattern
+        (list or None): path to all the files matching the pattern
+                        Or
+                        None if no files found
     """
     return glob.glob(path + f"*{pattern}*")
 

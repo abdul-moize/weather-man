@@ -81,7 +81,9 @@ def get_averages_month(month, path):
         month(str): a value containing 4 digit year and 2 digit month like: '2002/02', '2003/04'.
         path(str): a value containing path like: 'weatherfiles/'
     Returns:
-        None
+        (int or None):  0 for success
+                        Or
+                        None for failure
     """
     months_list = [
         "Jan",
