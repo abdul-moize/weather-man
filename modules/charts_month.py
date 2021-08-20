@@ -41,8 +41,11 @@ def generate_report_charts(extremes):
     This function displays a month report on console
     The report consists
     "day lowest_temp ++++++++++++++ highest_temp"
-    :param extremes:
-    :return:
+    Args:
+        extremes(list): contains all the entries of one month
+                        one entry looks like = [highest_temp, lowest_temp, mean_humidity]
+    Returns:
+        None
     """
     split = extremes[0][0].split("-")
     month = int(split[1])
@@ -63,11 +66,10 @@ def generate_report_charts(extremes):
 
 def charts_month(year_month, path):
     """
-    This function uses get_all_extremes() to get all readings of a month
-    Then it uses generate_report_charts() to print report on console
+    Displays chart on screen
     Args:
-        year_month(str): string like, '2004/5', '2006/7', etc
-        path(str):  path like, 'weatherfiles/', 'path/to/files/'
+        year_month(str): a value containing 4 digit year like, '2004/5', '2006/7', etc
+        path(str): a value containing path like, 'weatherfiles/', 'path/to/files/'
     Returns:
         (int or None):  0 for success
                         Or
