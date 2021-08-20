@@ -2,6 +2,7 @@
 This module generates a report which displays average highest and lowest temperature
 as well as average max humidity for a given month
 """
+import constants
 from modules.utils import (
     get_highest_temperature,
     get_lowest_temperature,
@@ -73,7 +74,7 @@ def generate_averages_report_month(averages):
         print(f"Average {val[0]}: {averages[i]}{val[1]}")
 
 
-def get_averages_month(month, path):
+def get_averages_month(month, path=constants.WEATHER_FILES_DIR):
     """
     Calculates and displays the average highest, lowest temperatures
     and average mean humidity for a given month in given path
