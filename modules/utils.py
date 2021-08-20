@@ -33,3 +33,72 @@ def read_data(year, path):
         with open(i, "r") as file:
             # skip first line as it contains field names
             yield file.readlines()[1:]
+
+
+def get_highest_temperature(line):
+    """
+    Returns the highest temperature from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+         (int or None): highest temperature
+                        OR
+                        None if there is no entry
+    """
+    try:
+        highest_temperature = int(line[1])
+        return highest_temperature
+    except ValueError:
+        return None
+
+
+def get_lowest_temperature(line):
+    """
+    Returns the lowest temperature from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+          (int or None):    lowest temperature
+                            OR
+                            None if there is no entry
+    """
+    try:
+        return int(line[3])
+    except ValueError:
+        return None
+
+
+def get_max_humidity(line):
+    """
+    Returns the maximum humidity from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+          (int or None):    max humidity
+                            Or
+                            None if there is no entry or wrong entry
+    """
+    try:
+        return int(line[7])
+    except ValueError:
+        return None
+
+
+def get_mean_humidity(line):
+    """
+    Returns the mean humidity from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+          (int or None):    mean humidity
+                            Or
+                            None if there is no entry or wrong entry
+    """
+    try:
+        return int(line[8])
+    except ValueError:
+        return None

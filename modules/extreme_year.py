@@ -3,59 +3,12 @@ This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
 import constants
-from modules.utils import read_data
-
-
-def get_highest_temperature(line):
-    """
-    Returns the highest temperature from the line read of a weather file
-    Args:
-        line(list): a list of strings containing different fields at different index
-                    please have a look at any weatherfile for more clarity
-    Returns:
-         (int or None): highest temperature
-                        OR
-                        None if there is no entry
-    """
-    try:
-        highest_temperature = int(line[1])
-        return highest_temperature
-    except ValueError:
-        return None
-
-
-def get_lowest_temperature(line):
-    """
-    Returns the lowest temperature from the line read of a weather file
-    Args:
-        line(list): a list of strings containing different fields at different index
-                    please have a look at any weatherfile for more clarity
-    Returns:
-          (int or None):    lowest temperature
-                            OR
-                            None if there is no entry
-    """
-    try:
-        return int(line[3])
-    except ValueError:
-        return None
-
-
-def get_max_humidity(line):
-    """
-    Returns the maximum humidity from the line read of a weather file
-    Args:
-        line(list): a list of strings containing different fields at different index
-                    please have a look at any weatherfile for more clarity
-    Returns:
-          (int or None):    max humidity
-                            Or
-                            None if there is no entry or wrong entry
-    """
-    try:
-        return int(line[7])
-    except ValueError:
-        return None
+from modules.utils import (
+    get_highest_temperature,
+    get_lowest_temperature,
+    get_max_humidity,
+    read_data,
+)
 
 
 def calculate_extremes(year, path):
