@@ -28,15 +28,13 @@ def calculate_averages(pattern, path):
                         Or
                         None for failure
     """
-    # entries of the month
-    entries = 0
     sum_highest_temperature = 0
     sum_lowest_temperature = 0
     sum_mean_humidity = 0
+    lines = []
     for lines in read_data(pattern, path):
         if lines is None:
             return None
-        entries = len(lines)
         for line in lines:
             parsed_line = line.split("\n")[0].split(",")
             max_temperature = get_highest_temperature(parsed_line)
@@ -49,9 +47,9 @@ def calculate_averages(pattern, path):
             if mean_humidity is not None:
                 sum_mean_humidity += mean_humidity
 
-    avg_highest_temperature = sum_highest_temperature / entries
-    avg_lowest_temperature = sum_lowest_temperature / entries
-    avg_mean_humidity = sum_mean_humidity / entries
+    avg_highest_temperature = sum_highest_temperature / len(lines)
+    avg_lowest_temperature = sum_lowest_temperature / len(lines)
+    avg_mean_humidity = sum_mean_humidity / len(lines)
     averages = [avg_highest_temperature, avg_lowest_temperature, avg_mean_humidity]
     return averages
 
