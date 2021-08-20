@@ -21,10 +21,12 @@ def calculate_averages(pattern, path):
         pattern: a string which contains a year/month e.g '2006/5', '2007/3'
         path: a string which contains path to a directory containing weather files
     Returns:
-        a list: length 3, averages where
-    averages[0] = avg_highest_temperature
-    averages[1] = avg_lowest_temperature
-    averages[2] = avg_mean_humidity
+        (list or None): list of length 3, averages where
+                        averages[0] = avg_highest_temperature
+                        averages[1] = avg_lowest_temperature
+                        averages[2] = avg_mean_humidity
+                        Or
+                        None for failure
     """
     # entries of the month
     entries = 0
@@ -32,6 +34,8 @@ def calculate_averages(pattern, path):
     sum_lowest_temperature = 0
     sum_mean_humidity = 0
     for lines in read_data(pattern, path):
+        if lines is None:
+            return None
         entries = len(lines)
         for line in lines:
             parsed_line = line.split("\n")[0].split(",")
@@ -73,16 +77,15 @@ def generate_averages_report_month(averages):
 
 def get_averages_month(month, path):
     """
-    This function uses 2 methods to calculate and display on console
-    the average highest and lowest temperatures and average mean humidity
-    for a given month in given path
+    Calculates and displays the average highest, lowest temperatures
+    and average mean humidity for a given month in given path
     Args:
-        month: a string which contains year/month like: '2006/6', '2007/3' , etc
-        path: a string which contains path to weather files like: 'path/'
+        month(str): a value containing 4 digit year and 2 digit month like: '2002/02', '2003/04'.
+        path(str): a value containing path like: 'weatherfiles/'
     Returns:
         None
     """
-    number_to_month = [
+    months_list = [
         "Jan",
         "Feb",
         "Mar",
@@ -96,10 +99,10 @@ def get_averages_month(month, path):
         "Nov",
         "Dec",
     ]
-    temp = month.split("/")
-    month = temp[0] + "_" + number_to_month[int(temp[1]) - 1]
+    month_split = month.split("/")
+    month = month_split[0] + "_" + months_list[int(month_split[1]) - 1]
     averages = calculate_averages(month, path)
-    if averages == -1:
-        return -1
+    if averages is None:
+        return None
     generate_averages_report_month(averages)
     return 0
