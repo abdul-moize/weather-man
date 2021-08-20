@@ -82,4 +82,4 @@ def charts_month(year_month, path):
     if extremes is None:
         return None
     generate_report_charts(extremes)
-    return None
+    return 0
