@@ -35,7 +35,10 @@ def main():
             path = constants.WEATHER_FILES_DIR
             parameters, args = getopt.getopt(parameters, allowed_parameters)
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             continue
         valid_flag = False
         handler = flag_handler[0]
@@ -51,7 +54,10 @@ def main():
             parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = constants.WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             iteration = 0
             continue
         if re.match(accepted_regex[j], parameters[iteration][1]):
@@ -64,7 +70,10 @@ def main():
             parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = constants.WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             iteration = 0
             continue
         iteration += 1

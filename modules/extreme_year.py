@@ -2,8 +2,6 @@
 This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
-import string
-
 import constants
 from modules.utils import read_data
 
@@ -15,7 +13,9 @@ def get_highest_temperature(line):
         line(list): a list of strings containing different fields at different index
                     please have a look at any weatherfile for more clarity
     Returns:
-         (int or None): Value stored at index 1 of line is highest temperature or None if there is no entry
+         (int or None): Value stored at index 1 of line is highest temperature
+                        OR
+                        None if there is no entry
     """
     try:
         highest_temperature = int(line[1])
@@ -93,7 +93,6 @@ def calculate_extremes(year, path):
                 min_temperature = [get_lowest_temperature(parsed_line), date]
                 max_humidity = [get_max_humidity(parsed_line), date]
                 initialized = True
-                continue
             else:
                 if max_temperature[0] is None:
                     max_temperature = [get_highest_temperature(parsed_line), date]
@@ -107,16 +106,22 @@ def calculate_extremes(year, path):
             max_temperature_line = get_highest_temperature(parsed_line)
             if max_temperature_line is not None:
                 # get max by index 0 which is temperature
-                max_temperature = max(max_temperature, [max_temperature_line, date], key=lambda x: x[0])
+                max_temperature = max(
+                    max_temperature, [max_temperature_line, date], key=lambda x: x[0]
+                )
 
             min_temperature_line = get_lowest_temperature(parsed_line)
             if min_temperature_line is not None:
                 # get min by comparing index 0 elements only
-                min_temperature = min([min_temperature_line, date], min_temperature, key=lambda x: x[0])
+                min_temperature = min(
+                    [min_temperature_line, date], min_temperature, key=lambda x: x[0]
+                )
 
             max_humidity_line = get_max_humidity(parsed_line)
             if max_humidity_line is not None:
-                max_humidity = max([max_humidity_line, date], max_humidity, key=lambda x: x[0])
+                max_humidity = max(
+                    [max_humidity_line, date], max_humidity, key=lambda x: x[0]
+                )
 
     return [max_temperature, min_temperature, max_humidity] if initialized else None
 

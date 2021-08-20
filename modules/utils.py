@@ -27,9 +27,7 @@ def read_data(year, path):
     """
     files = pattern_search(year, path)
     if not files:
-        print(
-            f"We don't have information regarding the " f"year {year} in the given path"
-        )
+        print(f"We don't have information regarding the year {year} in the given path")
         yield -1
     for i in files:
         with open(i, "r") as file:
