@@ -9,7 +9,7 @@ def pattern_search(pattern, path):
     This function returns all the files in the given path that match the pattern given
     Args:
         pattern(str): a string which contains any pattern e.g '2006', '2007', '2005/6', etc
-        path(str): a string which contains path to a directory containing weather files
+        path(str): a value containing path like: 'weatherfiles/'
     Returns:
         (list or None): path to all the files matching the pattern
                         Or
@@ -22,8 +22,8 @@ def read_data(year, path):
     """
     This function reads data from the files of a particular year
     Args:
-        year(str): 4digit string like '2002', '2003', '2004', etc
-        path(str): like any path string 'weatherfile/', 'path/to/files', etc
+        year(str): a value containing 4 digit year like '2002', '2003', '2004', etc
+        path(str): a value containing path like: 'weatherfiles/'
     Returns:
         generator object containing row of a file or None if no file exists for a given year
     """
