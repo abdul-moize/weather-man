@@ -137,7 +137,7 @@ def generate_extremes_report(maximums):
     Returns:
         None
     """
-    number_to_month = [
+    months_list = [
         "January",
         "February",
         "March",
@@ -156,7 +156,7 @@ def generate_extremes_report(maximums):
         month, day = maximums[i][1].split("-")[1:]
         print(
             f"{message_unit[i][0]}: {str(val[0])}{message_unit[i][1]} "
-            f"on {number_to_month[int(month) - 1]} {day}"
+            f"on {months_list[int(month) - 1]} {day}"
         )
 
 
