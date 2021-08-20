@@ -91,7 +91,7 @@ def generate_extremes_report(maximums):
     2. max_lowest_temperature with date
     3. max_humidity with date
     Args:
-        maximums(2d list):  a 3x2 list every row contains a list like
+        maximums(list):  a 3x2 list every row contains a list like
                             [value, date] value(int)  date(str) is like '2006-3-1'
                             0 index contains [highest_temperature, date]
                             1 index contains [lowest_temperature, date]

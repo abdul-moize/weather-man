@@ -18,8 +18,8 @@ def calculate_averages(pattern, path):
     2. avg lowest temperature
     3. avg mean humidity
     Args:
-        pattern: a string which contains a year/month e.g '2006/5', '2007/3'
-        path: a string which contains path to a directory containing weather files
+        pattern(str): a string which contains a year/month e.g '2006/5', '2007/3'
+        path(str): a string which contains path to a directory containing weather files
     Returns:
         (list or None): list of length 3, averages where
                         averages[0] = avg_highest_temperature
@@ -62,9 +62,9 @@ def generate_averages_report_month(averages):
     3. average mean humidity
     Args:
         averages: a list of length 3, averages where
-            averages[0] = avg_highest_temperature
-            averages[1] = avg_lowest_temperature
-            averages[2] = avg_mean_humidity
+            averages[0](int) = avg_highest_temperature
+            averages[1](int) = avg_lowest_temperature
+            averages[2](int) = avg_mean_humidity
     Returns:
         None
     """
