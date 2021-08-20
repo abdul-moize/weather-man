@@ -31,18 +31,19 @@ def calculate_averages(pattern, path):
     sum_highest_temperature = 0
     sum_lowest_temperature = 0
     sum_mean_humidity = 0
-    # indexes to sum values with.
-    # highest temperature is stored at index 1 of weather reading
-    # lowest temperature is stored at index 3 of weather reading
-    # max humidity is stored at index 7 of weather reading
-    # see the weather files for further explanation
     for lines in read_data(pattern, path):
         entries = len(lines)
         for line in lines:
             parsed_line = line.split("\n")[0].split(",")
-            sum_highest_temperature += get_highest_temperature(parsed_line)
-            sum_lowest_temperature += get_lowest_temperature(parsed_line)
-            sum_mean_humidity += get_mean_humidity(parsed_line)
+            max_temperature = get_highest_temperature(parsed_line)
+            if max_temperature is not None:
+                sum_highest_temperature += max_temperature
+            min_temperature = get_lowest_temperature(parsed_line)
+            if min_temperature is not None:
+                sum_lowest_temperature += min_temperature
+            mean_humidity = get_mean_humidity(parsed_line)
+            if mean_humidity is not None:
+                sum_mean_humidity += mean_humidity
 
     avg_highest_temperature = sum_highest_temperature / entries
     avg_lowest_temperature = sum_lowest_temperature / entries
