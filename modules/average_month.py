@@ -70,7 +70,7 @@ def generate_averages_report_month(averages):
         print(f"Average {val[0]}: {averages[i]}{val[1]}")
 
 
-def get_averages_month(year_month, path=WEATHER_FILES_DIR):
+def averages_month(year_month, path=WEATHER_FILES_DIR):
     """
     Calculates and displays the average highest, lowest temperatures
     and average mean humidity for a given month

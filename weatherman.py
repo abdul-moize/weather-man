@@ -6,7 +6,7 @@ import re
 import sys
 
 import constants
-from modules.average_month import get_averages_month
+from modules.average_month import averages_month
 from modules.extreme_year import extreme_temperatures_year
 
 
@@ -22,7 +22,7 @@ def main():
     iteration = 0
     accepted_flags = ["-e", "-a"]
     accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}"]
-    flag_handler = [extreme_temperatures_year, get_averages_month]
+    flag_handler = [extreme_temperatures_year, averages_month]
     path = constants.WEATHER_FILES_DIR
     while iteration < len(parameters):
         if len(parameters) < 1:
