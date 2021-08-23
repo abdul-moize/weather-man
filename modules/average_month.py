@@ -70,12 +70,12 @@ def generate_averages_report_month(averages):
         print(f"Average {val[0]}: {averages[i]}{val[1]}")
 
 
-def get_averages_month(month, path=WEATHER_FILES_DIR):
+def get_averages_month(year_month, path=WEATHER_FILES_DIR):
     """
     Calculates and displays the average highest, lowest temperatures
     and average mean humidity for a given month
     Args:
-        month(str): a value containing 4 digit year and 2 digit month like: '2002/02', '2003/04'.
+        year_month(str): a value containing 4 digit year and 2 digit month like: '2002/02', '2003/04'.
         path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (int or None):  0 for success
@@ -83,7 +83,7 @@ def get_averages_month(month, path=WEATHER_FILES_DIR):
                         None for failure
     """
 
-    month_split = month.split("/")
+    month_split = year_month.split("/")
     month = month_split[0] + "_" + months_list[int(month_split[1]) - 1][0:3]
     averages = calculate_averages(month, path)
     if averages is None:
