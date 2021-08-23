@@ -2,7 +2,7 @@
 This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
-import constants
+from constants import WEATHER_FILES_DIR, months_list
 from modules.utils import (
     get_highest_temperature,
     get_lowest_temperature,
@@ -20,7 +20,7 @@ def calculate_extremes(year, path):
     3. max humidity
     Args:
         year(str): a value containing 4 digit year like: '2002', '2003'.
-        path(str): a value containing path like: 'weatherfiles/'
+        path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
            (list or None):  a 3x2 list maximums where
                             maximums[0] = [max_highest_temperature, date]
@@ -99,20 +99,7 @@ def generate_extremes_report(maximums):
     Returns:
         None
     """
-    months_list = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
+
     message_unit = [("Highest", "C"), ("Lowest", "C"), ("Humidity", "%")]
     for i, val in enumerate(maximums):
         month, day = maximums[i][1].split("-")[1:]
@@ -122,12 +109,12 @@ def generate_extremes_report(maximums):
         )
 
 
-def extreme_temperatures_year(year, path=constants.WEATHER_FILES_DIR):
+def extreme_temperatures_year(year, path=WEATHER_FILES_DIR):
     """
     Calculates extreme temperatures and max humidity for a given year
     Args:
         year(str): a value containing 4 digit year like: '2002', '2003'.
-        path(str): a value containing path like: 'weatherfiles/'
+        path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (int or None):  0 for success
                         Or

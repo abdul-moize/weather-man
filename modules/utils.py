@@ -2,6 +2,12 @@
 This file contains methods that will provide ease to programmers
 """
 import glob
+from constants import (
+    MAX_TEMPERATURE_INDEX,
+    MIN_TEMPERATURE_INDEX,
+    MAX_HUMIDITY_INDEX,
+    MEAN_HUMIDITY_INDEX
+)
 
 
 def pattern_search(pattern, path):
@@ -22,10 +28,12 @@ def read_data(year, path):
     """
     This function reads data from the files of a particular year
     Args:
-        year(str): a value containing 4 digit year like '2002', '2003', '2004', etc
-        path(str): a value containing path like: 'weatherfiles/'
+        year(str): value containing 4 digit year like '2002', '2003', '2004', etc
+        path(str): value containing path like: 'weatherfiles/'
     Returns:
-        generator object containing row of a file or None if no file exists for a given year
+        Generator object containing row of a file
+        Or
+        None if no file exists for a given year
     """
     files = pattern_search(year, path)
     if not files:
@@ -49,7 +57,7 @@ def get_highest_temperature(line):
                         None if there is no entry
     """
     try:
-        highest_temperature = int(line[1])
+        highest_temperature = int(line[MAX_TEMPERATURE_INDEX])
         return highest_temperature
     except ValueError:
         return None
@@ -67,7 +75,7 @@ def get_lowest_temperature(line):
                             None if there is no entry
     """
     try:
-        return int(line[3])
+        return int(line[MIN_TEMPERATURE_INDEX])
     except ValueError:
         return None
 
@@ -84,7 +92,7 @@ def get_max_humidity(line):
                             None if there is no entry or wrong entry
     """
     try:
-        return int(line[7])
+        return int(line[MAX_HUMIDITY_INDEX])
     except ValueError:
         return None
 
@@ -101,6 +109,6 @@ def get_mean_humidity(line):
                             None if there is no entry or wrong entry
     """
     try:
-        return int(line[8])
+        return int(line[MEAN_HUMIDITY_INDEX])
     except ValueError:
         return None
