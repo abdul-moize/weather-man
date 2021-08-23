@@ -77,7 +77,8 @@ def charts_month(year_month, path):
     Displays chart on screen
     Args:
         year_month(str): Value containing 4 digit year like, '2004/5', '2006/7', etc
-        path(str): Value containing path like, 'weatherfiles/', 'path/to/files/'
+        path(str):  Value containing path to weather files
+                    e.g 'weatherfiles/', 'path/to/files/'
     Returns:
         (int or None):  0 for success
                         Or
