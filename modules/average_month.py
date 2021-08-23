@@ -75,7 +75,8 @@ def get_averages_month(year_month, path=WEATHER_FILES_DIR):
     Calculates and displays the average highest, lowest temperatures
     and average mean humidity for a given month
     Args:
-        year_month(str): a value containing 4 digit year and 2 digit month like: '2002/02', '2003/04'.
+        year_month(str): value containing 4 digit year and 2 digit month
+                        e.g: '2002/02', '2003/04'.
         path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (int or None):  0 for success
