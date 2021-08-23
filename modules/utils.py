@@ -2,11 +2,12 @@
 This file contains methods that will provide ease to programmers
 """
 import glob
+
 from constants import (
-    MAX_TEMPERATURE_INDEX,
-    MIN_TEMPERATURE_INDEX,
     MAX_HUMIDITY_INDEX,
-    MEAN_HUMIDITY_INDEX
+    MAX_TEMPERATURE_INDEX,
+    MEAN_HUMIDITY_INDEX,
+    MIN_TEMPERATURE_INDEX,
 )
 
 
