@@ -16,12 +16,13 @@ def main():
     Returns:
         None
     """
-    parameters, args = getopt.getopt(sys.argv[1:], ":e:a:")
+    allowed_parameters = ":e:a:"
+    parameters, args = getopt.getopt(sys.argv[1:], allowed_parameters)
     if args:
-        path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+        path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
     iteration = 0
     accepted_flags = ["-e", "-a"]
-    accepted_regex = [r"\d{4}", r"\d{4}/\d{1,2}"]
+    accepted_regex = [r"\d{4}\b", r"\d{4}/((0)?[1-9]|1[0-2])\b"]
     flag_handler = [extreme_temperatures_year, averages_month]
     path = constants.WEATHER_FILES_DIR
     while iteration < len(parameters):
@@ -33,9 +34,9 @@ def main():
             )
             iteration = 0
             path = constants.WEATHER_FILES_DIR
-            parameters, args = getopt.getopt(parameters, ":e:a:")
+            parameters, args = getopt.getopt(parameters, allowed_parameters)
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
             continue
         valid_flag = False
         handler = flag_handler[0]
@@ -48,10 +49,10 @@ def main():
                 f"Invalid Flag '{parameters[iteration][0]}'. "
                 f"Please enter a valid command: "
             ).split(" ")
-            parameters, args = getopt.getopt(parameters, ":e:a:")
+            parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = constants.WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
             iteration = 0
             continue
         if re.match(accepted_regex[j], parameters[iteration][1]):
@@ -61,10 +62,10 @@ def main():
                 f"Invalid date '{parameters[iteration][1]}'. "
                 f"Please enter a valid command: "
             ).split(" ")
-            parameters, args = getopt.getopt(parameters, ":e:a:")
+            parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = constants.WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], ":e:a:")[0]
+                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
             iteration = 0
             continue
         iteration += 1

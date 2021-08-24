@@ -11,7 +11,7 @@ from modules.utils import (
 )
 
 
-def calculate_averages(pattern, path):
+def calculate_averages(year, month, path):
     """
     Calculates average of highest_temperature, lowest_temperature and mean_humidity
     from files with names that match a pattern in given path
@@ -19,7 +19,8 @@ def calculate_averages(pattern, path):
     2. avg lowest temperature
     3. avg mean humidity
     Args:
-        pattern(str): a string which contains a year/month e.g '2006/5', '2007/3'
+        year(str):  Value containing 4 digit year e.g: '2004', '2005'
+        month(str): Value containing 2 digit month e.g: '02', '12'.
         path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (list or None): list of length 3, averages where
@@ -33,14 +34,13 @@ def calculate_averages(pattern, path):
     sum_lowest_temperature = 0
     sum_mean_humidity = 0
     lines = []
-    for lines in read_data(pattern, path):
-        if lines:
-            for line in lines:
-                parsed_line = line.split("\n")[0].split(",")
+    for lines in read_data(f"{year}_{month}", path):
+        for line in lines:
+            parsed_line = line.split("\n")[0].split(",")
 
-                sum_highest_temperature += get_highest_temperature(parsed_line) or 0
-                sum_lowest_temperature += get_lowest_temperature(parsed_line) or 0
-                sum_mean_humidity += get_mean_humidity(parsed_line) or 0
+            sum_highest_temperature += get_highest_temperature(parsed_line) or 0
+            sum_lowest_temperature += get_lowest_temperature(parsed_line) or 0
+            sum_mean_humidity += get_mean_humidity(parsed_line) or 0
 
     if lines:
         avg_highest_temperature = sum_highest_temperature / len(lines)
@@ -84,9 +84,11 @@ def averages_month(year_month, path=WEATHER_FILES_DIR):
                         None for failure
     """
 
-    month_split = year_month.split("/")
-    month = month_split[0] + "_" + months_list[int(month_split[1]) - 1][0:3]
-    averages = calculate_averages(month, path)
+    split = year_month.split("/")
+    year = split[0]
+    # convert from number to month name
+    month = months_list[int(split[1]) - 1][0:3]
+    averages = calculate_averages(year, month, path)
     if averages is None:
         return None
     generate_averages_report_month(averages)
