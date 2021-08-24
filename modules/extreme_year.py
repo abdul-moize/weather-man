@@ -2,60 +2,14 @@
 This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
-import constants
-from modules.utils import read_data
-
-
-def get_highest_temperature(line):
-    """
-    Returns the highest temperature from the line read of a weather file
-    Args:
-        line(list): a list of strings containing different fields at different index
-                    please have a look at any weatherfile for more clarity
-    Returns:
-         (int or None): highest temperature
-                        OR
-                        None if there is no entry
-    """
-    try:
-        highest_temperature = int(line[1])
-        return highest_temperature
-    except ValueError:
-        return None
-
-
-def get_lowest_temperature(line):
-    """
-    Returns the lowest temperature from the line read of a weather file
-    Args:
-        line(list): a list of strings containing different fields at different index
-                    please have a look at any weatherfile for more clarity
-    Returns:
-          (int or None):    lowest temperature
-                            OR
-                            None if there is no entry
-    """
-    try:
-        return int(line[3])
-    except ValueError:
-        return None
-
-
-def get_max_humidity(line):
-    """
-    Returns the maximum humidity from the line read of a weather file
-    Args:
-        line(list): a list of strings containing different fields at different index
-                    please have a look at any weatherfile for more clarity
-    Returns:
-          (int or None):    max humidity
-                            Or
-                            None if there is no entry or wrong entry
-    """
-    try:
-        return int(line[7])
-    except ValueError:
-        return None
+from constants import WEATHER_FILES_DIR, months_list
+from modules.utils import (
+    get_highest_temperature,
+    get_lowest_temperature,
+    get_max_humidity,
+    read_data,
+)
+from modules.validators import is_year
 
 
 def calculate_extremes(year, path):
@@ -67,7 +21,7 @@ def calculate_extremes(year, path):
     3. max humidity
     Args:
         year(str): a value containing 4 digit year like: '2002', '2003'.
-        path(str): a value containing path like: 'weatherfiles/'
+        path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
            (list or None):  a 3x2 list maximums where
                             maximums[0] = [max_highest_temperature, date]
@@ -138,7 +92,7 @@ def generate_extremes_report(maximums):
     2. max_lowest_temperature with date
     3. max_humidity with date
     Args:
-        maximums(2d list):  a 3x2 list every row contains a list like
+        maximums(list):  a 3x2 list every row contains a list like
                             [value, date] value(int)  date(str) is like '2006-3-1'
                             0 index contains [highest_temperature, date]
                             1 index contains [lowest_temperature, date]
@@ -146,20 +100,7 @@ def generate_extremes_report(maximums):
     Returns:
         None
     """
-    months_list = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
+
     message_unit = [("Highest", "C"), ("Lowest", "C"), ("Humidity", "%")]
     for i, val in enumerate(maximums):
         month, day = maximums[i][1].split("-")[1:]
@@ -169,19 +110,21 @@ def generate_extremes_report(maximums):
         )
 
 
-def extreme_temperatures_year(year, path=constants.WEATHER_FILES_DIR):
+def extreme_temperatures_year(year, path=WEATHER_FILES_DIR):
     """
     Calculates extreme temperatures and max humidity for a given year
     Args:
         year(str): a value containing 4 digit year like: '2002', '2003'.
-        path(str): a value containing path like: 'weatherfiles/'
+        path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (int or None):  0 for success
                         Or
                         None for error
     """
-    maximums = calculate_extremes(year, path)
-    if maximums is None:
-        return None
-    generate_extremes_report(maximums)
-    return 0
+    if is_year(year):
+        maximums = calculate_extremes(year, path)
+        if maximums is None:
+            return None
+        generate_extremes_report(maximums)
+        return 0
+    return None
