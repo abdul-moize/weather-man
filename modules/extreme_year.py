@@ -2,10 +2,14 @@
 This module will return the highest and lowest temperatures of a
 given year along with the most humid day.
 """
-import re
-
 from constants import WEATHER_FILES_DIR, months_list
-from modules import utils
+from modules.utils import (
+    get_highest_temperature,
+    get_lowest_temperature,
+    get_max_humidity,
+    read_data,
+)
+from modules.validators import is_year
 
 
 def calculate_extremes(year, path):
@@ -34,7 +38,7 @@ def calculate_extremes(year, path):
     min_temperature = [0, ""]
     max_humidity = [0, ""]
     initialized = False
-    for lines in utils.read_data(year, path):
+    for lines in read_data(year, path):
         for line in lines:
             # since readlines() returns ['linedata1\n','linedata2\n',...]
             # line contains ['linedata\n'] with split by '\n' to get ['linedata','\n]
@@ -43,35 +47,35 @@ def calculate_extremes(year, path):
             parsed_line = line.split("\n")[0].split(",")
             date = parsed_line[0]
             if not initialized:
-                max_temperature = [utils.get_highest_temperature(parsed_line), date]
-                min_temperature = [utils.get_lowest_temperature(parsed_line), date]
-                max_humidity = [utils.get_max_humidity(parsed_line), date]
+                max_temperature = [get_highest_temperature(parsed_line), date]
+                min_temperature = [get_lowest_temperature(parsed_line), date]
+                max_humidity = [get_max_humidity(parsed_line), date]
                 initialized = True
             else:
                 if max_temperature[0] is None:
-                    max_temperature = [utils.get_highest_temperature(parsed_line), date]
+                    max_temperature = [get_highest_temperature(parsed_line), date]
 
                 if min_temperature[0] is None:
-                    min_temperature = [utils.get_lowest_temperature(parsed_line), date]
+                    min_temperature = [get_lowest_temperature(parsed_line), date]
 
                 if max_humidity[0] is None:
-                    max_humidity = [utils.get_max_humidity(parsed_line), date]
+                    max_humidity = [get_max_humidity(parsed_line), date]
 
-            max_temperature_line = utils.get_highest_temperature(parsed_line)
+            max_temperature_line = get_highest_temperature(parsed_line)
             if max_temperature_line is not None:
                 # get max by index 0 which is temperature
                 max_temperature = max(
                     max_temperature, [max_temperature_line, date], key=lambda x: x[0]
                 )
 
-            min_temperature_line = utils.get_lowest_temperature(parsed_line)
+            min_temperature_line = get_lowest_temperature(parsed_line)
             if min_temperature_line is not None:
                 # get min by comparing index 0 elements only
                 min_temperature = min(
                     [min_temperature_line, date], min_temperature, key=lambda x: x[0]
                 )
 
-            max_humidity_line = utils.get_max_humidity(parsed_line)
+            max_humidity_line = get_max_humidity(parsed_line)
             if max_humidity_line is not None:
                 max_humidity = max(
                     [max_humidity_line, date], max_humidity, key=lambda x: x[0]
@@ -117,10 +121,7 @@ def extreme_temperatures_year(year, path=WEATHER_FILES_DIR):
                         Or
                         None for error
     """
-    if not isinstance(year, str):
-        return None
-    regex = r"\d{4}\b"
-    if re.match(regex, year):
+    if is_year(year):
         maximums = calculate_extremes(year, path)
         if maximums is None:
             return None

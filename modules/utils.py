@@ -9,6 +9,7 @@ from constants import (
     MEAN_HUMIDITY_INDEX,
     MIN_TEMPERATURE_INDEX,
 )
+from modules.validators import is_month, is_year, is_year_month
 
 
 def pattern_search(pattern, path):
@@ -113,3 +114,53 @@ def get_mean_humidity(line):
         return int(line[MEAN_HUMIDITY_INDEX])
     except ValueError:
         return None
+
+
+def get_month(month):
+    """
+    Checks if the value in year contains a 4 digit year and returns
+    the int value
+    Args:
+        month(str):  Value containing digits(01-12 or 1-9)
+    Returns:
+        (int or None):  integer value containing a number(1-12)
+                        Or
+                        None if month does not contain digits(1-9 or 01-12)
+    """
+
+    if is_month(month):
+        return int(month)
+    return None
+
+
+def get_year(year):
+    """
+    Returns integer containing 4 digit year
+    Args:
+        year(str):  Value containing 4 digit year e.g '2004', '2005', etc
+    Returns:
+        (int or None):  Integer containing 4 digit year
+                        Or
+                        None if year is not in valid format
+    """
+    if is_year(year):
+        return int(year)
+    return None
+
+
+def get_year_month(year_month):
+    """
+    Returns a tuple containing  two integers year and month
+    Args:
+        year_month(str):    Value containing 4 digit year and 2 digit month
+                            like '2004/01', '2004/1', etc
+    Returns:
+        (tuple or None):    A tuple containing year and month
+                            (year(int), month(int))
+                            Or
+                            None if year_month is not in right format
+    """
+    if is_year_month(year_month):
+        year, month = year_month.split("/")
+        return get_year(year), get_month(month)
+    return None
