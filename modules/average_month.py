@@ -2,6 +2,8 @@
 This module generates a report which displays average highest and lowest temperature
 as well as average mean humidity for a given month
 """
+import re
+
 from constants import WEATHER_FILES_DIR, months_list
 from modules.utils import (
     get_highest_temperature,
@@ -9,65 +11,6 @@ from modules.utils import (
     get_mean_humidity,
     read_data,
 )
-
-
-def calculate_averages(year, month, path):
-    """
-    Calculates average of highest_temperature, lowest_temperature and mean_humidity
-    from files with names that match a pattern in given path
-    1. avg highest temperature
-    2. avg lowest temperature
-    3. avg mean humidity
-    Args:
-        year(str):  Value containing 4 digit year e.g: '2004', '2005'
-        month(str): Value containing 2 digit month e.g: '02', '12'.
-        path(str): a value containing path to weather files e.g: 'weatherfiles/'
-    Returns:
-        (list or None): list of length 3, averages where
-                        averages[0] = avg_highest_temperature
-                        averages[1] = avg_lowest_temperature
-                        averages[2] = avg_mean_humidity
-                        Or
-                        None for failure
-    """
-    sum_highest_temperature = 0
-    sum_lowest_temperature = 0
-    sum_mean_humidity = 0
-    lines = []
-    for lines in read_data(f"{year}_{month}", path):
-        for line in lines:
-            parsed_line = line.split("\n")[0].split(",")
-
-            sum_highest_temperature += get_highest_temperature(parsed_line) or 0
-            sum_lowest_temperature += get_lowest_temperature(parsed_line) or 0
-            sum_mean_humidity += get_mean_humidity(parsed_line) or 0
-
-    if lines:
-        avg_highest_temperature = sum_highest_temperature / len(lines)
-        avg_lowest_temperature = sum_lowest_temperature / len(lines)
-        avg_mean_humidity = sum_mean_humidity / len(lines)
-        averages = [avg_highest_temperature, avg_lowest_temperature, avg_mean_humidity]
-        return averages
-    return None
-
-
-def generate_averages_report_month(averages):
-    """
-    Generates report using the averages list and displays
-    1. average highest temperature
-    2. average lowest temperature
-    3. average mean humidity
-    Args:
-        averages: a list of length 3, averages where
-            averages[0](int) = avg_highest_temperature
-            averages[1](int) = avg_lowest_temperature
-            averages[2](int) = avg_mean_humidity
-    Returns:
-        None
-    """
-    value_units = [("Highest", "C"), ("Lowest", "C"), ("Mean Humidity", "%")]
-    for i, val in enumerate(value_units):
-        print(f"Average {val[0]}: {averages[i]}{val[1]}")
 
 
 def averages_month(year_month, path=WEATHER_FILES_DIR):
@@ -84,12 +27,81 @@ def averages_month(year_month, path=WEATHER_FILES_DIR):
                         None for failure
     """
 
-    split = year_month.split("/")
-    year = split[0]
-    # convert from number to month name
-    month = months_list[int(split[1]) - 1][0:3]
-    averages = calculate_averages(year, month, path)
-    if averages is None:
+    def calculate_averages(year, month, path):
+        """
+        Calculates average of highest_temperature, lowest_temperature and mean_humidity
+        from files with names that match a pattern in given path
+        1. avg highest temperature
+        2. avg lowest temperature
+        3. avg mean humidity
+        Args:
+            year(str):  Value containing 4 digit year e.g: '2004', '2005'
+            month(str): Value containing 2 digit month e.g: '02', '12'.
+            path(str): a value containing path to weather files e.g: 'weatherfiles/'
+        Returns:
+            (list or None): list of length 3, averages where
+                            averages[0] = avg_highest_temperature
+                            averages[1] = avg_lowest_temperature
+                            averages[2] = avg_mean_humidity
+                            Or
+                            None for failure
+        """
+
+        sum_highest_temperature = 0
+        sum_lowest_temperature = 0
+        sum_mean_humidity = 0
+        lines = []
+        for lines in read_data(f"{year}_{month}", path):
+            for line in lines:
+                parsed_line = line.split("\n")[0].split(",")
+
+                sum_highest_temperature += get_highest_temperature(parsed_line) or 0
+                sum_lowest_temperature += get_lowest_temperature(parsed_line) or 0
+                sum_mean_humidity += get_mean_humidity(parsed_line) or 0
+
+        if lines:
+            avg_highest_temperature = sum_highest_temperature / len(lines)
+            avg_lowest_temperature = sum_lowest_temperature / len(lines)
+            avg_mean_humidity = sum_mean_humidity / len(lines)
+            averages = [
+                avg_highest_temperature,
+                avg_lowest_temperature,
+                avg_mean_humidity,
+            ]
+            return averages
         return None
-    generate_averages_report_month(averages)
-    return 0
+
+    def generate_averages_report_month(averages):
+        """
+        Generates report using the averages list and displays
+        1. average highest temperature
+        2. average lowest temperature
+        3. average mean humidity
+        Args:
+            averages: a list of length 3, averages where
+                averages[0](int) = avg_highest_temperature
+                averages[1](int) = avg_lowest_temperature
+                averages[2](int) = avg_mean_humidity
+        Returns:
+            None
+        """
+
+        value_units = [("Highest", "C"), ("Lowest", "C"), ("Mean Humidity", "%")]
+        for i, val in enumerate(value_units):
+            print(f"Average {val[0]}: {averages[i]}{val[1]}")
+
+    if not isinstance(year_month, str):
+        return None
+    regex = r"\d{4}/((0)?[1-9]|1[0-2])\b"
+    if re.match(regex, year_month):
+        split = year_month.split("/")
+        year = split[0]
+        # convert from number to month name
+        month = months_list[int(split[1]) - 1][0:3]
+        averages = calculate_averages(year, month, path)
+        if averages is None:
+            return None
+        generate_averages_report_month(averages)
+        return 0
+    print(f"Invalid date {year_month}. Please enter a valid date")
+    return None

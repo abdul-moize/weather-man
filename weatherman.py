@@ -5,26 +5,25 @@ import getopt
 import re
 import sys
 
-import constants
+from constants import WEATHER_FILES_DIR, accepted_regex, allowed_parameters
 from modules.average_month import averages_month
 from modules.extreme_year import extreme_temperatures_year
 
 
 def main():
+
     """
     The driver function for weatherman.
     Returns:
         None
     """
-    allowed_parameters = ":e:a:"
     parameters, args = getopt.getopt(sys.argv[1:], allowed_parameters)
     if args:
         path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
     iteration = 0
     accepted_flags = ["-e", "-a"]
-    accepted_regex = [r"\d{4}\b", r"\d{4}/((0)?[1-9]|1[0-2])\b"]
     flag_handler = [extreme_temperatures_year, averages_month]
-    path = constants.WEATHER_FILES_DIR
+    path = WEATHER_FILES_DIR
     while iteration < len(parameters):
         if len(parameters) < 1:
             parameters = input(
@@ -33,10 +32,13 @@ def main():
                 "path is optional"
             )
             iteration = 0
-            path = constants.WEATHER_FILES_DIR
+            path = WEATHER_FILES_DIR
             parameters, args = getopt.getopt(parameters, allowed_parameters)
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             continue
         valid_flag = False
         handler = flag_handler[0]
@@ -50,9 +52,12 @@ def main():
                 f"Please enter a valid command: "
             ).split(" ")
             parameters, args = getopt.getopt(parameters, allowed_parameters)
-            path = constants.WEATHER_FILES_DIR
+            path = WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             iteration = 0
             continue
         if re.match(accepted_regex[j], parameters[iteration][1]):
@@ -63,9 +68,12 @@ def main():
                 f"Please enter a valid command: "
             ).split(" ")
             parameters, args = getopt.getopt(parameters, allowed_parameters)
-            path = constants.WEATHER_FILES_DIR
+            path = WEATHER_FILES_DIR
             if args:
-                path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+                path, parameters = (
+                    args[0],
+                    getopt.getopt(args[1:], allowed_parameters)[0],
+                )
             iteration = 0
             continue
         iteration += 1
