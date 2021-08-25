@@ -84,9 +84,6 @@ def calculate_extremes(year, path):
     return [max_temperature, min_temperature, max_humidity] if initialized else None
 
 
-from modules.utils import calculate_extremes
-
-
 def generate_extremes_report(maximums):
     """
     This function prints/generates a report on the console based on the maximums list
