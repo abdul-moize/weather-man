@@ -6,7 +6,7 @@ import re
 
 def is_year(year):
     """
-    This function verifies that the value of argument year
+    This function verifies if that the value of year
     is a 4 digit year or not
     Args:
         year(str): Value containing 4 digit year e.g '2004', '2005', etc

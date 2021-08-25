@@ -1,5 +1,5 @@
 """
-This file contains methods that will provide ease to programmers
+This module contains functions that are used at multiple places in the application
 """
 import glob
 
@@ -27,11 +27,11 @@ def pattern_search(pattern, path):
     return glob.glob(path + f"*{pattern}*")
 
 
-def read_data(year, path):
+def read_data(pattern, path):
     """
-    This function reads data from the files of a particular year
+    This function reads data from the files in the given path that match the pattern
     Args:
-        year(str): value containing 4 digit year like '2002', '2003', '2004', etc
+        pattern(str): value containing 4 digit year like '2002', '2003', '2004', etc
         path(str): value containing path like: 'weatherfiles/'
     Returns:
         (Generator or list):
@@ -39,9 +39,9 @@ def read_data(year, path):
             Or
             empty list if no file exists for a given year
     """
-    files = pattern_search(year, path)
+    files = pattern_search(pattern, path)
     if not files:
-        print(f"We don't have information regarding the year {year} in the given path")
+        print(f"We don't have information regarding the year {pattern} in the given path")
         yield []
     for i in files:
         with open(i, "r") as file:

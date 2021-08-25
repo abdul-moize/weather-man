@@ -1,6 +1,6 @@
 """
-This module will return the highest and lowest temperatures of a
-given year along with the most humid day.
+This module will display the highest & lowest temperatures and max humidity of a
+given year along with respective dates
 """
 from constants import WEATHER_FILES_DIR, months_list
 from modules.utils import (
@@ -15,21 +15,20 @@ from modules.validators import is_year
 
 def calculate_extremes(year, path):
     """
-    This function reads all the files at the given path which contain the given pattern
-    given year along with the most humid day.
+    This function filters and returns the highest, lowest temperatures and max humidity
+    from weather files of a given year in path
     1. max highest temperature
     2. max lowest temperature
     3. max humidity
     Args:
-        year(str): a value containing 4 digit year like: '2002', '2003'.
-        path(str): a value containing path to weather files e.g: 'weatherfiles/'
+        year(str or int): Value containing 4 digit year like: '2002', '2003'.
+        path(str): Value containing path to weather files e.g: 'weatherfiles/'
     Returns:
            (list or None):  a 3x2 list maximums where
-                            maximums[0] = [max_highest_temperature, date]
-                            maximums[1] = [max_lowest_temperature, date]
-                            maximums[2] = [max_humidity, date]
-                            date here is a string like: '2002-4-1', '2004-3-14'
-                            or None if there is an error or failure
+                            maximums[0] = [max_highest_temperature(int), date(str)]
+                            maximums[1] = [max_lowest_temperature(int), date(str)]
+                            maximums[2] = [max_humidity(int), date(str)]
+                            or None if there are no files for the given year
     """
     # max_temperature contains highest temperature and
     # date on which the temperature was highest
@@ -93,11 +92,11 @@ def generate_extremes_report(maximums):
     2. max_lowest_temperature with date
     3. max_humidity with date
     Args:
-        maximums(list):  a 3x2 list every row contains a list like
+        maximums(list):     a 3x2 list every row contains a list like
                             [value, date] value(int)  date(str) is like '2006-3-1'
                             0 index contains [highest_temperature, date]
                             1 index contains [lowest_temperature, date]
-                            2 index contains [max_humidity, date
+                            2 index contains [max_humidity, date]
     Returns:
         None
     """
@@ -113,7 +112,7 @@ def generate_extremes_report(maximums):
 
 def extreme_temperatures_year(year, path=WEATHER_FILES_DIR):
     """
-    Calculates extreme temperatures and max humidity for a given year
+    Calculates Highest & Lowest temperatures and max humidity for a given year
     Args:
         year(str): a value containing 4 digit year like: '2002', '2003'.
         path(str): a value containing path to weather files e.g: 'weatherfiles/'

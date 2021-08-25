@@ -15,19 +15,19 @@ from modules.utils import (
 def calculate_averages(year, month, path):
     """
     Calculates average of highest_temperature, lowest_temperature and mean_humidity
-    from files with names that match a pattern in given path
+    from file with names that match the year and month in given path
     1. avg highest temperature
     2. avg lowest temperature
     3. avg mean humidity
     Args:
         year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
-        month(str or int): Value containing 3 character month name e.g: 'Feb', 'Aug'.
+        month(str): Value containing 3 character month name e.g: 'Feb', 'Aug'.
         path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (list or None): list of length 3, averages where
-                        averages[0] = avg_highest_temperature
-                        averages[1] = avg_lowest_temperature
-                        averages[2] = avg_mean_humidity
+                        averages[0](float) = avg_highest_temperature
+                        averages[1](float) = avg_lowest_temperature
+                        averages[2](float) = avg_mean_humidity
                         Or
                         None for failure
     """
@@ -63,6 +63,7 @@ def generate_averages_report_month(averages):
     1. average highest temperature
     2. average lowest temperature
     3. average mean humidity
+    for a month
     Args:
         averages: a list of length 3, averages where
             averages[0](int) = avg_highest_temperature

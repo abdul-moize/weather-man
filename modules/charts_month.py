@@ -1,5 +1,6 @@
 """
-This module generates charts on console
+This module displays in colored format Highest & Lowest Temperatures
+of each day of a given month
 """
 
 from constants import WEATHER_FILES_DIR, months_list
@@ -14,11 +15,11 @@ from modules.utils import (
 
 def get_all_extremes(year, month, path):
     """
-    Appends all extreme temperatures in a file to the list extremes and
+    Appends Highest & Lowest temperatures in a file to the list extremes and
     returns it
     Args:
         year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
-        month(str or int): Value containing 3 character month name e.g: 'Feb', 'Aug'.
+        month(str): Value containing 3 character month name e.g: 'Feb', 'Aug'.
         path(str):  Value containing path to weather files
                     e.g 'weatherfiles/', 'path/to/files/'
     Returns:
@@ -80,7 +81,7 @@ def generate_report_charts(extremes):
 
 def charts_month(year_month, path=WEATHER_FILES_DIR):
     """
-    Displays chart on screen
+    Displays Highest & Lowest temperatures of each day of month on screen
     Args:
         year_month(str): Value containing 4 digit year like, '2004/5', '2006/7', etc
         path(str):  Value containing path to weather files
