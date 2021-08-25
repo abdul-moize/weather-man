@@ -62,15 +62,19 @@ def generate_report_charts(extremes):
     print(months_list[month - 1] + " " + year)
     for entry in extremes:
         day = f"\33[0m{entry[0].split('-')[2]}"
-        red_plus = f"\33[91m{'+'*entry[1]}"
-        blue_plus = f"\33[94m{'+'*entry[2]}"
+        red_plus = ""
+        blue_plus = ""
         if entry[1] is None:
-            entry[1] = "No Entry"
+            entry[1] = "\33[91mNo Entry"
+        else:
+            red_plus = f"\33[91m{'+' * entry[1]}"
+            entry[1] = f"\33[91m{entry[1]}C"
         if entry[2] is None:
-            entry[2] = "No Entry"
-        entry[1] = f"\33[91m{entry[1]}C"
-        entry[2] = f"\33[94m{entry[2]}C"
-        report_line = f"{day} {entry[2]} {blue_plus}{red_plus} {entry[1]}"
+            entry[2] = "\33[94mNo Entry"
+        else:
+            blue_plus = f"\33[94m{'+' * entry[2]}"
+            entry[2] = f"\33[94m{entry[2]}C"
+        report_line = f"{day} {entry[2]} {blue_plus}{red_plus} {entry[1]}\33[0m"
         print(report_line)
 
 
