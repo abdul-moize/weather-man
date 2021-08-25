@@ -4,6 +4,7 @@ This file contains methods that will provide ease to programmers
 import glob
 
 from constants import (
+    DATE_INDEX,
     MAX_HUMIDITY_INDEX,
     MAX_TEMPERATURE_INDEX,
     MEAN_HUMIDITY_INDEX,
@@ -33,18 +34,36 @@ def read_data(year, path):
         year(str): value containing 4 digit year like '2002', '2003', '2004', etc
         path(str): value containing path like: 'weatherfiles/'
     Returns:
-        Generator object containing row of a file
-        Or
-        None if no file exists for a given year
+        (Generator or list):
+            Generator object containing all lines of a file
+            Or
+            empty list if no file exists for a given year
     """
     files = pattern_search(year, path)
     if not files:
         print(f"We don't have information regarding the year {year} in the given path")
-        yield None
+        yield []
     for i in files:
         with open(i, "r") as file:
             # skip first line as it contains field names
             yield file.readlines()[1:]
+
+
+def get_date(line):
+    """
+    Returns the date from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+         (str or None): date in format yyyy-mm-dd e.g '2004-3-3'
+                        OR
+                        None if there is no entry
+    """
+    try:
+        return line[DATE_INDEX]
+    except IndexError:
+        return None
 
 
 def get_highest_temperature(line):

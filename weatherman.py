@@ -6,26 +6,26 @@ import sys
 
 from constants import WEATHER_FILES_DIR
 from modules.average_month import averages_month
+from modules.charts_month import charts_month
 from modules.extreme_year import extreme_temperatures_year
 from modules.validators import is_year, is_year_month
 
 
 def main():
-
     """
     The driver function for weatherman.
     Returns:
         None
     """
-    allowed_parameters = ":e:a:"
+    allowed_parameters = ":e:a:c:"
+    path = WEATHER_FILES_DIR
     parameters, args = getopt.getopt(sys.argv[1:], allowed_parameters)
     if args:
         path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
     iteration = 0
-    accepted_flags = ["-e", "-a"]
-    validators = [is_year, is_year_month]
-    flag_handler = [extreme_temperatures_year, averages_month]
-    path = WEATHER_FILES_DIR
+    accepted_flags = ["-e", "-a", "-c"]
+    validators = [is_year, is_year_month, is_year_month]
+    flag_handler = [extreme_temperatures_year, averages_month, charts_month]
     while iteration < len(parameters):
         if len(parameters) < 1:
             parameters = input(

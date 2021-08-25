@@ -4,6 +4,7 @@ given year along with the most humid day.
 """
 from constants import WEATHER_FILES_DIR, months_list
 from modules.utils import (
+    get_date,
     get_highest_temperature,
     get_lowest_temperature,
     get_max_humidity,
@@ -15,7 +16,7 @@ from modules.validators import is_year
 def calculate_extremes(year, path):
     """
     This function reads all the files at the given path which contain the given pattern
-    from each file that matches the pattern finds the following:
+    given year along with the most humid day.
     1. max highest temperature
     2. max lowest temperature
     3. max humidity
@@ -45,7 +46,7 @@ def calculate_extremes(year, path):
             # then we get 'linedata' by grabbing the [0]
             # lastly,  we split by ',' to get the entries parsed
             parsed_line = line.split("\n")[0].split(",")
-            date = parsed_line[0]
+            date = get_date(parsed_line)
             if not initialized:
                 max_temperature = [get_highest_temperature(parsed_line), date]
                 min_temperature = [get_lowest_temperature(parsed_line), date]

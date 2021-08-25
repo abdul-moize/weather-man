@@ -2,3 +2,5 @@
 disable=F0001
 [MASTER]
 ignore=venv/, .idea/
+[SIMILARITIES]
+ignore-imports=yes
