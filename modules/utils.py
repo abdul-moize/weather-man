@@ -41,7 +41,9 @@ def read_data(pattern, path):
     """
     files = pattern_search(pattern, path)
     if not files:
-        print(f"We don't have information regarding the year {pattern} in the given path")
+        print(
+            f"We don't have information regarding the year {pattern} in the given path"
+        )
         yield []
     for i in files:
         with open(i, "r") as file:
