@@ -2,21 +2,23 @@
 This module generates charts on console
 """
 
+from constants import WEATHER_FILES_DIR, months_list
 from modules.utils import (
     get_date,
     get_highest_temperature,
     get_lowest_temperature,
-    number_to_month,
+    get_year_month,
     read_data,
 )
 
 
-def get_all_extremes(year_month, path):
+def get_all_extremes(year, month, path):
     """
-    Appends all extreme temperatures in a file to the list extremes
+    Appends all extreme temperatures in a file to the list extremes and
+    returns it
     Args:
-        year_month(str):    Value containing 4 digit year and 2 digit month
-                            e.g '2002/5', '2005/6', etc
+        year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
+        month(str or int): Value containing 3 character month name e.g: 'Feb', 'Aug'.
         path(str):  Value containing path to weather files
                     e.g 'weatherfiles/', 'path/to/files/'
     Returns:
@@ -26,7 +28,7 @@ def get_all_extremes(year_month, path):
                         None for failure
     """
     extremes = []
-    for lines in read_data(year_month, path):
+    for lines in read_data(f"{year}_{month}", path):
         if lines:
             for line in lines:
                 parsed_line = line.split("\n")[0].split(",")
@@ -57,7 +59,7 @@ def generate_report_charts(extremes):
     split = extremes[0][0].split("-")
     month = int(split[1])
     year = split[0]
-    print(number_to_month[month - 1] + " " + year)
+    print(months_list[month - 1] + " " + year)
     for entry in extremes:
         day = f"\33[0m{entry[0].split('-')[2]}"
         red_plus = f"\33[91m{'+'*entry[1]}"
@@ -72,7 +74,7 @@ def generate_report_charts(extremes):
         print(report_line)
 
 
-def charts_month(year_month, path):
+def charts_month(year_month, path=WEATHER_FILES_DIR):
     """
     Displays chart on screen
     Args:
@@ -84,10 +86,10 @@ def charts_month(year_month, path):
                         Or
                         None for error
     """
-    # split contains [year, month]
-    split = year_month.split("/")
-    year_month = split[0] + "_" + number_to_month[int(split[1]) - 1]
-    extremes = get_all_extremes(year_month, path)
+    year, month = get_year_month(year_month)
+    # convert from number to month name
+    month = months_list[month - 1][0:3]
+    extremes = get_all_extremes(year, month, path)
     if extremes is None:
         return None
     generate_report_charts(extremes)

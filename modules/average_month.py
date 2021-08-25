@@ -20,8 +20,8 @@ def calculate_averages(year, month, path):
     2. avg lowest temperature
     3. avg mean humidity
     Args:
-        year(str):  Value containing 4 digit year e.g: '2004', '2005'
-        month(str): Value containing 2 digit month e.g: '02', '12'.
+        year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
+        month(str or int): Value containing 3 character month name e.g: 'Feb', 'Aug'.
         path(str): a value containing path to weather files e.g: 'weatherfiles/'
     Returns:
         (list or None): list of length 3, averages where

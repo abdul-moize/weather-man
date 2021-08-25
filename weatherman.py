@@ -1,15 +1,14 @@
 """
-weatherman is a software that generates reports about the past weather of murree
+Weatherman is a software that generates reports about the past weather of murree
 """
 import getopt
-import re
 import sys
 
 from constants import WEATHER_FILES_DIR
 from modules.average_month import averages_month
+from modules.charts_month import charts_month
 from modules.extreme_year import extreme_temperatures_year
 from modules.validators import is_year, is_year_month
-from modules.charts_month import charts_month
 
 
 def main():
@@ -24,7 +23,7 @@ def main():
         path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
     iteration = 0
     accepted_flags = ["-e", "-a", "-c"]
-    validators = [is_year, is_year_month]
+    validators = [is_year, is_year_month, is_year_month]
     path = WEATHER_FILES_DIR
     flag_handler = [extreme_temperatures_year, averages_month, charts_month]
     while iteration < len(parameters):

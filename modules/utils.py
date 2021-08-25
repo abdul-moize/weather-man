@@ -4,6 +4,7 @@ This file contains methods that will provide ease to programmers
 import glob
 
 from constants import (
+    DATE_INDEX,
     MAX_HUMIDITY_INDEX,
     MAX_TEMPERATURE_INDEX,
     MEAN_HUMIDITY_INDEX,
@@ -45,6 +46,23 @@ def read_data(year, path):
         with open(i, "r") as file:
             # skip first line as it contains field names
             yield file.readlines()[1:]
+
+
+def get_date(line):
+    """
+    Returns the date from the line read of a weather file
+    Args:
+        line(list): a list of strings containing different fields at different index
+                    please have a look at any weatherfile for more clarity
+    Returns:
+         (str or None): date in format yyyy-mm-dd e.g '2004-3-3'
+                        OR
+                        None if there is no entry
+    """
+    try:
+        return line[DATE_INDEX]
+    except IndexError:
+        return None
 
 
 def get_highest_temperature(line):
