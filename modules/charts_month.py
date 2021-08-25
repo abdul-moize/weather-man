@@ -15,8 +15,8 @@ from modules.utils import (
 
 def get_all_extremes(year, month, path):
     """
-    Appends Highest & Lowest temperatures in a file to the list extremes and
-    returns it
+    Appends Highest & Lowest temperatures of each day in the file which matches the year and month
+    to the list extremes and returns it
     Args:
         year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
         month(str): Value containing 3 character month name e.g: 'Feb', 'Aug'.

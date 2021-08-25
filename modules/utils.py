@@ -1,5 +1,6 @@
 """
-This module contains functions that are used at multiple places in the application
+This module contains functions that are used frequently
+at multiple places in the application
 """
 import glob
 
