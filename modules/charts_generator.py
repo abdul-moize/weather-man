@@ -3,11 +3,12 @@ This module displays in colored format Highest & Lowest Temperatures
 of each day of a given month
 """
 
-from constants import WEATHER_FILES_DIR, months_list
+from constants import WEATHER_FILES_DIR
 from modules.utils import (
     get_date,
     get_highest_temperature,
     get_lowest_temperature,
+    get_month_name,
     get_year_month,
     read_data,
 )
@@ -29,14 +30,13 @@ def get_all_extremes(year, month, path):
                         None for failure
     """
     extremes = []
-    for lines in read_data(f"{year}_{month}", path):
-        if lines:
-            for line in lines:
-                parsed_line = line.split("\n")[0].split(",")
-                date = get_date(parsed_line)
-                max_temp = get_highest_temperature(parsed_line)
-                min_temp = get_lowest_temperature(parsed_line)
-                extremes.append([date, max_temp, min_temp])
+    for month_data in read_data(f"{year}_{month}", path):
+        for line in month_data:
+            parsed_line = line.split("\n")[0].split(",")
+            date = get_date(parsed_line)
+            max_temp = get_highest_temperature(parsed_line)
+            min_temp = get_lowest_temperature(parsed_line)
+            extremes.append([date, max_temp, min_temp])
     return extremes if len(extremes) > 0 else None
 
 
@@ -60,22 +60,14 @@ def generate_report_charts(extremes):
     split = extremes[0][0].split("-")
     month = int(split[1])
     year = split[0]
-    print(months_list[month - 1] + " " + year)
+    print(get_month_name(month) + " " + year)
     for entry in extremes:
         day = f"\33[0m{entry[0].split('-')[2]}"
-        red_plus = ""
-        blue_plus = ""
-        if entry[1] is None:
-            entry[1] = "\33[91mNo Entry"
-        else:
-            red_plus = f"\33[91m{'+' * entry[1]}"
-            entry[1] = f"\33[91m{entry[1]}C"
-        if entry[2] is None:
-            entry[2] = "\33[94mNo Entry"
-        else:
-            blue_plus = f"\33[94m{'+' * entry[2]}"
-            entry[2] = f"\33[94m{entry[2]}C"
-        report_line = f"{day} {entry[2]} {blue_plus}{red_plus} {entry[1]}\33[0m"
+        if entry[1] is None or entry[2] is None:
+            continue
+        red_plus = f"\33[91m{'+' * entry[1]}"
+        blue_plus = f"\33[94m{'+' * entry[2]}"
+        report_line = f"{day} {blue_plus}{red_plus} \33[0m{entry[2]}C-{entry[1]}C"
         print(report_line)
 
 
@@ -93,7 +85,7 @@ def charts_month(year_month, path=WEATHER_FILES_DIR):
     """
     year, month = get_year_month(year_month)
     # convert from number to month name
-    month = months_list[month - 1][0:3]
+    month = get_month_name(month)[0:3]
     extremes = get_all_extremes(year, month, path)
     if extremes is None:
         return None

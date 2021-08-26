@@ -6,7 +6,7 @@ import sys
 
 from constants import WEATHER_FILES_DIR
 from modules.average_month import averages_month
-from modules.charts_month import charts_month
+from modules.charts_generator import charts_month
 from modules.extreme_year import extreme_temperatures_year
 from modules.validators import is_year, is_year_month
 
@@ -68,8 +68,10 @@ def main():
             handler(parameters[iteration][1], path)
         else:
             parameters = input(
-                f"Invalid date '{parameters[iteration][1]}'. "
-                f"Please enter a valid command: "
+                f"Invalid year{' or month' if index > 0 else ''} "
+                f"'{parameters[iteration][1]}'. "
+                f"The correct format is yyyy{'/mm' if index > 0 else ''}"
+                f". Please enter a valid command: "
             ).split(" ")
             parameters, args = getopt.getopt(parameters, allowed_parameters)
             path = WEATHER_FILES_DIR

@@ -36,8 +36,8 @@ def calculate_averages(year, month, path):
     sum_lowest_temperature = 0
     sum_mean_humidity = 0
     lines = []
-    for lines in read_data(f"{year}_{month}", path):
-        for line in lines:
+    for month_data in read_data(f"{year}_{month}", path):
+        for line in month_data:
             parsed_line = line.split("\n")[0].split(",")
 
             sum_highest_temperature += get_highest_temperature(parsed_line) or 0
@@ -49,9 +49,9 @@ def calculate_averages(year, month, path):
         avg_lowest_temperature = sum_lowest_temperature / len(lines)
         avg_mean_humidity = sum_mean_humidity / len(lines)
         averages = [
-            avg_highest_temperature,
-            avg_lowest_temperature,
-            avg_mean_humidity,
+            round(avg_highest_temperature),
+            round(avg_lowest_temperature),
+            round(avg_mean_humidity),
         ]
         return averages
     return None
@@ -92,8 +92,6 @@ def averages_month(year_month, path=WEATHER_FILES_DIR):
                         None for failure
     """
 
-    if not isinstance(year_month, str):
-        return None
     year, month = get_year_month(year_month)
     # convert from number to month name
     month = months_list[month - 1][0:3]

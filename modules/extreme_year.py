@@ -38,8 +38,8 @@ def calculate_extremes(year, path):
     min_temperature = [0, ""]
     max_humidity = [0, ""]
     initialized = False
-    for lines in read_data(year, path):
-        for line in lines:
+    for month_data in read_data(year, path):
+        for line in month_data:
             # since readlines() returns ['linedata1\n','linedata2\n',...]
             # line contains ['linedata\n'] with split by '\n' to get ['linedata','\n]
             # then we get 'linedata' by grabbing the [0]
@@ -121,10 +121,8 @@ def extreme_temperatures_year(year, path=WEATHER_FILES_DIR):
                         Or
                         None for error
     """
-    if is_year(year):
-        maximums = calculate_extremes(year, path)
-        if maximums is None:
-            return None
-        generate_extremes_report(maximums)
-        return 0
-    return None
+    maximums = calculate_extremes(year, path)
+    if maximums is None:
+        return None
+    generate_extremes_report(maximums)
+    return 0

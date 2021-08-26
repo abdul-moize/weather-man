@@ -10,6 +10,7 @@ from constants import (
     MAX_TEMPERATURE_INDEX,
     MEAN_HUMIDITY_INDEX,
     MIN_TEMPERATURE_INDEX,
+    months_list
 )
 from modules.validators import is_month, is_year, is_year_month
 
@@ -43,7 +44,7 @@ def read_data(pattern, path):
     files = pattern_search(pattern, path)
     if not files:
         print(
-            f"We don't have information regarding the year {pattern} in the given path"
+            f"We don't have information regarding the file {pattern} in the given path"
         )
         yield []
     for i in files:
@@ -136,6 +137,21 @@ def get_mean_humidity(line):
         return int(line[MEAN_HUMIDITY_INDEX])
     except ValueError:
         return None
+
+
+def get_month_name(number):
+    """
+    Return the name of the month depending on the number
+    Args:
+        number(int):    integer in range 1-12
+    Returns:
+        (str or None):  str containing month name
+                        Or
+                        None if number is not in the range 1-12
+    """
+    if isinstance(number, int) and 0 < number < 13:
+        return months_list[number-1]
+    return None
 
 
 def get_month(month):
