@@ -10,7 +10,7 @@ from constants import (
     MAX_TEMPERATURE_INDEX,
     MEAN_HUMIDITY_INDEX,
     MIN_TEMPERATURE_INDEX,
-    months_list
+    months_list,
 )
 from modules.validators import is_month, is_year, is_year_month
 
@@ -150,7 +150,7 @@ def get_month_name(number):
                         None if number is not in the range 1-12
     """
     if isinstance(number, int) and 0 < number < 13:
-        return months_list[number-1]
+        return months_list[number - 1]
     return None
 
 

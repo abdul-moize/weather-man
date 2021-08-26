@@ -10,7 +10,6 @@ from modules.utils import (
     get_max_humidity,
     read_data,
 )
-from modules.validators import is_year
 
 
 def calculate_extremes(year, path):
