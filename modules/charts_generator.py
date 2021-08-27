@@ -3,6 +3,7 @@ This module displays in colored format Highest & Lowest Temperatures
 of each day of a given month
 """
 
+from constants import TEMPERATURE_UNIT
 from modules.data_models import MonthData
 from modules.utils import get_month_name, get_year_month
 
@@ -24,17 +25,18 @@ def generate_report_charts(extremes):
     Returns:
         None
     """
-    split = extremes[0][0].split("-")
-    month = int(split[1])
-    year = split[0]
-    print(get_month_name(month) + " " + year)
+    year, month = extremes[0][0:2]
+    print(f"{month} {year}")
     for entry in extremes:
-        day = f"\33[0m{entry[0].split('-')[2]}"
-        if entry[1] is None or entry[2] is None:
+        day = f"\33[0m{entry[2]}"
+        if entry[3] is None or entry[4] is None:
             continue
-        red_plus = f"\33[91m{'+' * entry[1]}"
-        blue_plus = f"\33[94m{'+' * entry[2]}"
-        report_line = f"{day} {blue_plus}{red_plus} \33[0m{entry[2]}C-{entry[1]}C"
+        red_plus = f"\33[91m{'+' * entry[3]}"
+        blue_plus = f"\33[94m{'+' * entry[4]}"
+        report_line = (
+            f"{day} {blue_plus}{red_plus} "
+            f"\33[0m{entry[4]}{TEMPERATURE_UNIT}-{entry[3]}{TEMPERATURE_UNIT}"
+        )
         print(report_line)
 
 
@@ -52,7 +54,7 @@ def charts_month(year_month, path):
     """
     year, month = get_year_month(year_month)
     # convert from number to month name
-    month = get_month_name(month)[0:3]
+    month = get_month_name(month)
     month_extremes = MonthData(year, month, path).get_month_values()
     if month_extremes is None:
         return None

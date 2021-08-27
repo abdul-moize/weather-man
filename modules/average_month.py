@@ -23,9 +23,9 @@ def generate_averages_report_month(averages):
         None
     """
 
-    value_units = [("Highest", "C"), ("Lowest", "C"), ("Mean Humidity", "%")]
-    for i, val in enumerate(value_units):
-        print(f"Average {val[0]}: {averages[i]}{val[1]}")
+    starting_message = ["Highest", "Lowest", "Mean Humidity"]
+    for index, val in enumerate(starting_message):
+        print(f"Average {val}: {averages[index]}")
 
 
 def averages_month(year_month, path):
@@ -44,7 +44,7 @@ def averages_month(year_month, path):
 
     year, month = get_year_month(year_month)
     # convert from number to month name
-    month = months_list[month - 1][0:3]
+    month = months_list[month - 1]
     averages = MonthData(year, month, path).get_averages()
     if averages is None:
         return None

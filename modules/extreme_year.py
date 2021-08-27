@@ -2,8 +2,8 @@
 This module will display the highest & lowest temperatures and max humidity of a
 given year along with respective dates
 """
-from constants import months_list
 from modules.data_models import YearData
+from modules.utils import get_month_name
 
 
 def generate_extremes_report(maximums):
@@ -23,12 +23,12 @@ def generate_extremes_report(maximums):
         None
     """
 
-    message_unit = [("Highest", "C"), ("Lowest", "C"), ("Humidity", "%")]
-    for i, val in enumerate(maximums):
-        month, day = maximums[i][1].split("-")[1:]
+    starting_message = ["Highest", "Lowest", "Humidity"]
+    for index, dictionary in enumerate(maximums):
+        month, day = dictionary["date"].split("-")[1:]
         print(
-            f"{message_unit[i][0]}: {str(val[0])}{message_unit[i][1]} "
-            f"on {months_list[int(month) - 1]} {day}"
+            f"{starting_message[index]}: {dictionary['value']} on "
+            f"{get_month_name(int(month))}, {day}"
         )
 
 

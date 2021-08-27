@@ -3,6 +3,8 @@ This file contains constant values that are not expected to change throughout
 the run of a program
 """
 WEATHER_FILES_DIR = "weatherfiles/"
+TEMPERATURE_UNIT = "C"
+HUMIDITY_UNIT = "%"
 DATE_INDEX = 0
 MAX_TEMPERATURE_INDEX = 1
 MIN_TEMPERATURE_INDEX = 3

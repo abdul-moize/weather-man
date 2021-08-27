@@ -1,7 +1,7 @@
 """
 This module contains classes for easy data management
 """
-from constants import WEATHER_FILES_DIR
+from constants import HUMIDITY_UNIT, TEMPERATURE_UNIT, WEATHER_FILES_DIR
 from modules.utils import (
     get_date,
     get_highest_temperature,
@@ -122,7 +122,7 @@ class MonthData:
             None
         """
 
-        month_data = next(read_data(f"{self.year}_{self.name}", self.path))
+        month_data = next(read_data(f"{self.year}_{self.name[0:3]}", self.path))
         for line in month_data:
             day_data = DayData(parse_line(line))
             self.days_data.append(day_data)
@@ -141,30 +141,30 @@ class MonthData:
                             Or
                             None if no data exists for the month
         """
-        max_temperature_and_date = [-1000, ""]
-        min_temperature_and_date = [1000, ""]
-        max_humidity_and_date = [-1000, ""]
+        max_temperature = {"value": -1000, "date": ""}
+        min_temperature = {"value": 1000, "date": ""}
+        max_humidity = {"value": -1000, "date": ""}
         for day_data in self.days_data:
             date = day_data.get_date()
 
-            max_arg2 = [day_data.get_max_temperature(), date]
-            max_temperature_and_date = max(
-                max_temperature_and_date, max_arg2, key=lambda x: x[0] or -1000
+            max_arg2 = {"value": day_data.get_max_temperature(), "date": date}
+            max_temperature = max(
+                max_temperature, max_arg2, key=lambda x: x["value"] or -1000
             )
 
-            min_arg2 = [day_data.get_min_temperature(), date]
-            min_temperature_and_date = min(
-                min_temperature_and_date, min_arg2, key=lambda x: x[0] or 1000
+            min_arg2 = {"value": day_data.get_min_temperature(), "date": date}
+            min_temperature = min(
+                min_temperature, min_arg2, key=lambda x: x["value"] or 1000
             )
 
-            max_arg2 = [day_data.get_max_humidity(), date]
-            max_humidity_and_date = max(
-                max_humidity_and_date, max_arg2, key=lambda x: x[0] or -1000
+            max_arg2 = {"value": day_data.get_max_humidity(), "date": date}
+            max_humidity = max(
+                max_humidity, max_arg2, key=lambda x: x["value"] or -1000
             )
         return [
-            max_temperature_and_date,
-            min_temperature_and_date,
-            max_humidity_and_date,
+            max_temperature,
+            min_temperature,
+            max_humidity,
         ]
 
     def get_averages(self):
@@ -173,9 +173,9 @@ class MonthData:
         Returns:
             (list or None): list containing rounded averages
                             [
-                                avg_highest_temperature(int),
-                                avg_lowest_temperature(int),
-                                avg_mean_humidity(int)
+                                avg_highest_temperature(str),
+                                avg_lowest_temperature(str),
+                                avg_mean_humidity(str)
                             ]
                             Or
                             None if no data exists for the month
@@ -193,28 +193,39 @@ class MonthData:
             sum_mean_humidity += day_data.get_mean_humidity() or 0
 
         return [
-            round(sum_highest_temperature / len(self.days_data)),
-            round(sum_lowest_temperature / len(self.days_data)),
-            round(sum_mean_humidity / len(self.days_data)),
+            f"{round(sum_highest_temperature / len(self.days_data))}{TEMPERATURE_UNIT}",
+            f"{round(sum_lowest_temperature / len(self.days_data))}{TEMPERATURE_UNIT}",
+            f"{round(sum_mean_humidity / len(self.days_data))}{HUMIDITY_UNIT}",
         ]
 
     def get_month_values(self):
         """
         Returns date, highest temperature, lowest temperature and max humidity for each day
         Returns:
-            (list or None): list containing date, max_temperature and min_temperature
+            (list or None): list containing year, month, day, max_temperature and min_temperature
                             for each day of the month
-                            month_data[i] = [date(str), max_temperature(int), min_temperature(int)]
+                            month_data[i] = [
+                                year(str),
+                                name(str),
+                                day(str),
+                                max_temperature_with_unit(str),
+                                min_temperature_with_unit(str)
+                            ]
         """
 
         if not self.days_data:
             return None
         month_data = []
         for day_data in self.days_data:
-            date = day_data.get_date()
-            max_temperature = day_data.get_max_temperature()
-            min_temperature = day_data.get_min_temperature()
-            month_data.append([date, max_temperature, min_temperature])
+            month_data.append(
+                [
+                    self.year,
+                    self.name,
+                    day_data.get_date().split("-")[2],
+                    day_data.get_max_temperature(),
+                    day_data.get_min_temperature(),
+                ]
+            )
 
         return month_data
 
@@ -264,21 +275,26 @@ class YearData:
 
         if not self.months_data:
             return None
-        max_temperature = [-1000, ""]
-        min_temperature = [1000, ""]
-        max_humidity = [-1000, ""]
+        max_temperature = {"value": -1000, "date": ""}
+        min_temperature = {"value": 1000, "date": ""}
+        max_humidity = {"value": -1000, "date": ""}
         for month_data in self.months_data:
             month_max_extremes = month_data.get_max_extremes_with_date()
 
             max_temperature = max(
-                max_temperature, month_max_extremes[0], key=lambda x: x[0] or -1000
+                max_temperature,
+                month_max_extremes[0],
+                key=lambda x: x["value"] or -1000,
             )
 
             min_temperature = min(
-                min_temperature, month_max_extremes[1], key=lambda x: x[0] or 1000
+                min_temperature, month_max_extremes[1], key=lambda x: x["value"] or 1000
             )
 
             max_humidity = max(
-                max_humidity, month_max_extremes[2], key=lambda x: x[0] or -1000
+                max_humidity, month_max_extremes[2], key=lambda x: x["value"] or -1000
             )
+        max_temperature["value"] = f"{max_temperature['value']}{TEMPERATURE_UNIT}"
+        min_temperature["value"] = f"{min_temperature['value']}{TEMPERATURE_UNIT}"
+        max_humidity["value"] = f"{max_humidity['value']}{HUMIDITY_UNIT}"
         return [max_temperature, min_temperature, max_humidity]
