@@ -4,40 +4,8 @@ of each day of a given month
 """
 
 from constants import WEATHER_FILES_DIR
-from modules.utils import (
-    get_date,
-    get_highest_temperature,
-    get_lowest_temperature,
-    get_month_name,
-    get_year_month,
-    read_data,
-)
-
-
-def get_all_extremes(year, month, path):
-    """
-    Appends Highest & Lowest temperatures of each day in the file which matches the year and month
-    to the list extremes and returns it
-    Args:
-        year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
-        month(str): Value containing 3 character month name e.g: 'Feb', 'Aug'.
-        path(str):  Value containing path to weather files
-                    e.g 'weatherfiles/', 'path/to/files/'
-    Returns:
-        (list or None): Contains all the extremes of one month
-                        an element looks  like: [date(str), max_temp(int), min_temp(int)]
-                        Or
-                        None for failure
-    """
-    extremes = []
-    for month_data in read_data(f"{year}_{month}", path):
-        for line in month_data:
-            parsed_line = line.split("\n")[0].split(",")
-            date = get_date(parsed_line)
-            max_temp = get_highest_temperature(parsed_line)
-            min_temp = get_lowest_temperature(parsed_line)
-            extremes.append([date, max_temp, min_temp])
-    return extremes if len(extremes) > 0 else None
+from modules.data_models import MonthData
+from modules.utils import get_month_name, get_year_month
 
 
 def generate_report_charts(extremes):
@@ -86,8 +54,8 @@ def charts_month(year_month, path=WEATHER_FILES_DIR):
     year, month = get_year_month(year_month)
     # convert from number to month name
     month = get_month_name(month)[0:3]
-    extremes = get_all_extremes(year, month, path)
-    if extremes is None:
+    month_extremes = MonthData(year, month, path).get_month_values()
+    if month_extremes is None:
         return None
-    generate_report_charts(extremes)
+    generate_report_charts(month_extremes)
     return 0

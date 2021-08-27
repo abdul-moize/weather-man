@@ -3,58 +3,8 @@ This module calculates and displays average highest, lowest temperatures
 and average mean humidity for a given month
 """
 from constants import WEATHER_FILES_DIR, months_list
-from modules.utils import (
-    get_highest_temperature,
-    get_lowest_temperature,
-    get_mean_humidity,
-    get_year_month,
-    read_data,
-)
-
-
-def calculate_averages(year, month, path):
-    """
-    Calculates average of highest_temperature, lowest_temperature and mean_humidity
-    from file that match the year and month in given path
-    1. avg highest temperature
-    2. avg lowest temperature
-    3. avg mean humidity
-    Args:
-        year(str or int):  Value containing 4 digit year e.g: '2004', '2005'
-        month(str): Value containing 3 character month name e.g: 'Feb', 'Aug'.
-        path(str): a value containing path to weather files e.g: 'weatherfiles/'
-    Returns:
-        (list or None): list of length 3, averages where
-                        averages[0](float) = avg_highest_temperature
-                        averages[1](float) = avg_lowest_temperature
-                        averages[2](float) = avg_mean_humidity
-                        Or
-                        None for failure
-    """
-
-    sum_highest_temperature = 0
-    sum_lowest_temperature = 0
-    sum_mean_humidity = 0
-    lines = []
-    for month_data in read_data(f"{year}_{month}", path):
-        for line in month_data:
-            parsed_line = line.split("\n")[0].split(",")
-
-            sum_highest_temperature += get_highest_temperature(parsed_line) or 0
-            sum_lowest_temperature += get_lowest_temperature(parsed_line) or 0
-            sum_mean_humidity += get_mean_humidity(parsed_line) or 0
-
-    if lines:
-        avg_highest_temperature = sum_highest_temperature / len(lines)
-        avg_lowest_temperature = sum_lowest_temperature / len(lines)
-        avg_mean_humidity = sum_mean_humidity / len(lines)
-        averages = [
-            round(avg_highest_temperature),
-            round(avg_lowest_temperature),
-            round(avg_mean_humidity),
-        ]
-        return averages
-    return None
+from modules.data_models import MonthData
+from modules.utils import get_year_month
 
 
 def generate_averages_report_month(averages):
@@ -95,7 +45,7 @@ def averages_month(year_month, path=WEATHER_FILES_DIR):
     year, month = get_year_month(year_month)
     # convert from number to month name
     month = months_list[month - 1][0:3]
-    averages = calculate_averages(year, month, path)
+    averages = MonthData(year, month, path).get_averages()
     if averages is None:
         return None
     generate_averages_report_month(averages)

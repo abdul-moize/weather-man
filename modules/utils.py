@@ -15,6 +15,17 @@ from constants import (
 from modules.validators import is_month, is_year, is_year_month
 
 
+def parse_line(line):
+    """
+    Parses a raw line read from weather file to a list of strings
+    Args:
+        line(str):   raw line read from weather file
+    Returns:
+        (list):
+    """
+    return line.split("\n")[0].split(",")
+
+
 def pattern_search(pattern, path):
     """
     This function returns all the files in the given path that match the pattern given
