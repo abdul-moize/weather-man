@@ -229,6 +229,50 @@ class MonthData:
 
         return month_data
 
+    def generate_averages_report_month(self):
+        """
+        Generates report using the averages list and displays
+        1. average highest temperature
+        2. average lowest temperature
+        3. average mean humidity
+        for a month
+        Returns:
+            None
+        """
+        averages = self.get_averages()
+        starting_message = ["Highest", "Lowest", "Mean Humidity"]
+        for index, val in enumerate(starting_message):
+            print(f"Average {val}: {averages[index]}")
+
+    def generate_report_charts(self):
+        """
+        This function displays month's report on console
+        A report looks like
+        "Month Year"
+        "day1 lowest_temp ++++++++++++++ highest_temp"
+        "day2 lowest_temp ++++++++++++++ highest_temp"
+        .
+        .
+        .
+        "day30 lowest_temp ++++++++++++++ highest_temp"
+        Returns:
+            None
+        """
+        extremes = self.get_month_values()
+        year, month = extremes[0][0:2]
+        print(f"{month} {year}")
+        for entry in extremes:
+            day = f"\33[0m{entry[2]}"
+            if entry[3] is None or entry[4] is None:
+                continue
+            red_plus = f"\33[91m{'+' * entry[3]}"
+            blue_plus = f"\33[94m{'+' * entry[4]}"
+            report_line = (
+                f"{day} {blue_plus}{red_plus} "
+                f"\33[0m{entry[4]}{TEMPERATURE_UNIT}-{entry[3]}{TEMPERATURE_UNIT}"
+            )
+            print(report_line)
+
 
 class YearData:
     """
@@ -298,3 +342,22 @@ class YearData:
         min_temperature["value"] = f"{min_temperature['value']}{TEMPERATURE_UNIT}"
         max_humidity["value"] = f"{max_humidity['value']}{HUMIDITY_UNIT}"
         return [max_temperature, min_temperature, max_humidity]
+
+    def generate_extremes_report(self):
+        """
+        This function prints/generates a report on the console based on the maximums list
+        the report displays the following
+        1. max_highest_temperature with date
+        2. max_lowest_temperature with date
+        3. max_humidity with date
+        Returns:
+            None
+        """
+        maximums = self.get_max_extremes_with_date()
+        starting_message = ["Highest", "Lowest", "Humidity"]
+        for index, dictionary in enumerate(maximums):
+            month, day = dictionary["date"].split("-")[1:]
+            print(
+                f"{starting_message[index]}: {dictionary['value']} on "
+                f"{get_month_name(int(month))}, {day}"
+            )
