@@ -3,7 +3,6 @@ This module displays in colored format Highest & Lowest Temperatures
 of each day of a given month
 """
 
-from constants import WEATHER_FILES_DIR
 from modules.data_models import MonthData
 from modules.utils import get_month_name, get_year_month
 

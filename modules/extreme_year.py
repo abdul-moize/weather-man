@@ -2,7 +2,7 @@
 This module will display the highest & lowest temperatures and max humidity of a
 given year along with respective dates
 """
-from constants import WEATHER_FILES_DIR, months_list
+from constants import months_list
 from modules.data_models import YearData
 
 

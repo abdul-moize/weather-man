@@ -2,7 +2,7 @@
 This module calculates and displays average highest, lowest temperatures
 and average mean humidity for a given month
 """
-from constants import WEATHER_FILES_DIR, months_list
+from constants import months_list
 from modules.data_models import MonthData
 from modules.utils import get_year_month
 
