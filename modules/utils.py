@@ -21,7 +21,7 @@ def parse_line(line):
     Args:
         line(str):   raw line read from weather file
     Returns:
-        (list):
+        (list): list of strings containing different fields
     """
     return line.split("\n")[0].split(",")
 

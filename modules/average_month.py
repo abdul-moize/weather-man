@@ -1,5 +1,5 @@
 """
-This module calculates and displays average highest, lowest temperatures
+This module displays average highest, lowest temperatures
 and average mean humidity for a given month
 """
 from constants import months_list
