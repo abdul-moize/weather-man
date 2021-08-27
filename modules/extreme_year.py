@@ -32,7 +32,7 @@ def generate_extremes_report(maximums):
         )
 
 
-def extreme_temperatures_year(year, path=WEATHER_FILES_DIR):
+def extreme_temperatures_year(year, path):
     """
     Calculates Highest & Lowest temperatures and max humidity for a given year
     Args:

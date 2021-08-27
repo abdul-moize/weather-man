@@ -39,7 +39,7 @@ def generate_report_charts(extremes):
         print(report_line)
 
 
-def charts_month(year_month, path=WEATHER_FILES_DIR):
+def charts_month(year_month, path):
     """
     Displays Highest & Lowest temperatures of each day of month on screen
     Args:
