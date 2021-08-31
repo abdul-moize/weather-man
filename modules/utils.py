@@ -10,8 +10,8 @@ from constants import (
     MAX_TEMPERATURE_INDEX,
     MEAN_HUMIDITY_INDEX,
     MIN_TEMPERATURE_INDEX,
-    months_list,
 )
+from datetime import date
 from modules.validators import is_month, is_year, is_year_month
 
 
@@ -71,12 +71,13 @@ def get_date(line):
         line(list): a list of strings containing different fields at different index
                     please have a look at any weatherfile for more clarity
     Returns:
-         (str or None): date in format yyyy-mm-dd e.g '2004-3-3'
-                        OR
-                        None if there is no entry
+         (date or None):    date object
+                            OR
+                            None if there is no entry
     """
     try:
-        return line[DATE_INDEX]
+        # split into [yyyy, mm, dd] then convert to int and return date object
+        return date(*[int(i) for i in line[DATE_INDEX].split("-")])
     except IndexError:
         return None
 
@@ -150,18 +151,20 @@ def get_mean_humidity(line):
         return None
 
 
-def get_month_name(number):
+def get_month_name(number, flag="%B"):
     """
     Return the name of the month depending on the number
     Args:
         number(int):    integer in range 1-12
+        flag(str):  '%B' for full month name like 'January, February'
+                    '%b' for 3 characters like 'Jan', 'Feb'
     Returns:
         (str or None):  str containing month name
                         Or
                         None if number is not in the range 1-12
     """
     if isinstance(number, int) and 0 < number < 13:
-        return months_list[number - 1]
+        return date(1, number, 1).strftime(flag)
     return None
 
 

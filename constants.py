@@ -5,11 +5,22 @@ the run of a program
 WEATHER_FILES_DIR = "weatherfiles/"
 TEMPERATURE_UNIT = "C"
 HUMIDITY_UNIT = "%"
-DATE_INDEX = 0
-MAX_TEMPERATURE_INDEX = 1
-MIN_TEMPERATURE_INDEX = 3
-MAX_HUMIDITY_INDEX = 7
-MEAN_HUMIDITY_INDEX = 8
+first_line = open(
+    f"{WEATHER_FILES_DIR}Murree_weather_2004_Aug.txt",
+    "r"
+).readline()
+fields = first_line.split("\n")[0].split(",")
+for index, field in enumerate(fields):
+    if field == "PKT":
+        DATE_INDEX = index
+    elif field == "Max TemperatureC":
+        MAX_TEMPERATURE_INDEX = index
+    elif field == "Min TemperatureC":
+        MIN_TEMPERATURE_INDEX = index
+    elif field == "Max Humidity":
+        MAX_HUMIDITY_INDEX = index
+    elif field == " Mean Humidity":
+        MEAN_HUMIDITY_INDEX = index
 months_list = [
     "January",
     "February",

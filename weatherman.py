@@ -5,7 +5,7 @@ import getopt
 import sys
 
 from constants import WEATHER_FILES_DIR
-from modules.data_models import MonthData, YearData
+from modules.data_models import MonthData, YearData, ReportGenerator
 from modules.utils import get_month_name, get_year_month
 from modules.validators import is_year, is_year_month
 
@@ -68,14 +68,15 @@ def main():
 
         if validator(parameters[iteration][1]):
             if parameters[iteration][0] == "-e":
-                YearData(parameters[iteration][1], path).generate_extremes_report()
+                year_data = YearData(parameters[iteration][1], path)
+                ReportGenerator(year_data=year_data).generate_extremes_report()
             else:
                 year, month = get_year_month(parameters[iteration][1])
-                month_data = MonthData(year, get_month_name(month), path)
+                month_data = MonthData(year, month, path)
                 if parameters[iteration][0] == "-a":
-                    month_data.generate_averages_report_month()
+                    ReportGenerator(month_data).generate_averages_report_month()
                 else:
-                    month_data.generate_report_charts()
+                    ReportGenerator(month_data).generate_report_charts()
         else:
             iteration = 0
             path, parameters = re_take_input(allowed_parameters)
