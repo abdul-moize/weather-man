@@ -76,6 +76,14 @@ class MonthData:
             self.days_data.append(day_data)
 
     def get_name(self, flag="%B"):
+        """
+        Returns month name
+        Args:
+            flag(str):  '%B' for full name
+                        '%b' for 3 letter name
+        Returns:
+            None
+        """
         return get_month_name(self.month, flag)
 
     def get_max_month_humidity(self):

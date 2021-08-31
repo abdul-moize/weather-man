@@ -5,10 +5,7 @@ the run of a program
 WEATHER_FILES_DIR = "weatherfiles/"
 TEMPERATURE_UNIT = "C"
 HUMIDITY_UNIT = "%"
-first_line = open(
-    f"{WEATHER_FILES_DIR}Murree_weather_2004_Aug.txt",
-    "r"
-).readline()
+first_line = open(f"{WEATHER_FILES_DIR}Murree_weather_2004_Aug.txt", "r").readline()
 fields = first_line.split("\n")[0].split(",")
 for index, field in enumerate(fields):
     if field == "PKT":

@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=F0001
+disable=F0001, R0903
 [MASTER]
 ignore=venv/, .idea/
 [SIMILARITIES]

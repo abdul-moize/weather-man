@@ -3,6 +3,7 @@ This module contains functions that are used frequently
 at multiple places in the application
 """
 import glob
+from datetime import date
 
 from constants import (
     DATE_INDEX,
@@ -11,7 +12,6 @@ from constants import (
     MEAN_HUMIDITY_INDEX,
     MIN_TEMPERATURE_INDEX,
 )
-from datetime import date
 from modules.validators import is_month, is_year, is_year_month
 
 

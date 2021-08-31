@@ -5,8 +5,8 @@ import getopt
 import sys
 
 from constants import WEATHER_FILES_DIR
-from modules.data_models import MonthData, YearData, ReportGenerator
-from modules.utils import get_month_name, get_year_month
+from modules.data_models import MonthData, ReportGenerator, YearData
+from modules.utils import get_year_month
 from modules.validators import is_year, is_year_month
 
 

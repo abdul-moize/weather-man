@@ -57,14 +57,14 @@ def is_year_month(year_month):
     """
 
     if isinstance(year_month, str):
-        regex = '''
+        regex = """
         [1-9]       # starting character must be in range 1-9
         \\d{3}\\b   # must end with 3 digits(0-9)
         /           # followed by a slash
         0?[1-9]\\b  # 0 is optional but must end with a digit(1-9)
         |           # or
         1[0-2]\\b   # start with 1 and end with digit(0-2)
-        '''
+        """
         if re.match(regex, year_month, re.VERBOSE):
             return True
     return False
