@@ -4,17 +4,14 @@ Weatherman is a software that generates reports about the past weather of murree
 import getopt
 import sys
 
-from constants import WEATHER_FILES_DIR
+from constants import ALLOWED_PARAMETERS, WEATHER_FILES_DIR
 from modules.data_models import MonthData, ReportGenerator, YearData
-from modules.utils import get_year_month
-from modules.validators import is_year, is_year_month
+from modules.utils import get_year_month, validate_command
 
 
-def re_take_input(allowed_parameters):
+def re_take_input():
     """
     Takes input from user and returns parameters and path
-    Args:
-        allowed_parameters(str): Value containing allowed flags like ':e:', ':e:a:'
     Returns:
         (tuple):    tuple containing path(str) and parameters(list) returned by getopt
                     path contains path to weather files like 'weatherfiles/'
@@ -26,11 +23,11 @@ def re_take_input(allowed_parameters):
         "path is optional"
     )
     path = WEATHER_FILES_DIR
-    parameters, args = getopt.getopt(parameters, allowed_parameters)
+    parameters, args = getopt.getopt(parameters, ALLOWED_PARAMETERS)
     if args:
         path, parameters = (
             args[0],
-            getopt.getopt(args[1:], allowed_parameters)[0],
+            getopt.getopt(args[1:], ALLOWED_PARAMETERS)[0],
         )
     return path, parameters
 
@@ -41,45 +38,31 @@ def main():
     Returns:
         None
     """
-    allowed_parameters = ":e:a:c:"
     path = WEATHER_FILES_DIR
-    parameters, args = getopt.getopt(sys.argv[1:], allowed_parameters)
+    parameters, args = getopt.getopt(sys.argv[1:], ALLOWED_PARAMETERS)
     if args:
-        path, parameters = args[0], getopt.getopt(args[1:], allowed_parameters)[0]
+        path, parameters = args[0], getopt.getopt(args[1:], ALLOWED_PARAMETERS)[0]
     iteration = 0
-    accepted_flags = ["-e", "-a", "-c"]
-    validators = [is_year, is_year_month, is_year_month]
     while iteration < len(parameters):
         if len(parameters) < 1:
             iteration = 0
-            path, parameters = re_take_input(allowed_parameters)
+            path, parameters = re_take_input()
             continue
-        valid_flag = False
-        validator = validators[0]
-        if accepted_flags.__contains__(parameters[iteration][0]):
-            index = accepted_flags.index(parameters[iteration][0])
-            validator = validators[index]
-            valid_flag = True
-
-        if not valid_flag:
-            iteration = 0
-            path, parameters = re_take_input(allowed_parameters)
-            continue
-
-        if validator(parameters[iteration][1]):
-            if parameters[iteration][0] == "-e":
-                year_data = YearData(parameters[iteration][1], path)
+        flag, flag_argument = parameters[iteration]
+        if validate_command(flag, flag_argument):
+            if flag == "-e":
+                year_data = YearData(flag_argument, path)
                 ReportGenerator(year_data=year_data).generate_extremes_report()
             else:
-                year, month = get_year_month(parameters[iteration][1])
+                year, month = get_year_month(flag_argument)
                 month_data = MonthData(year, month, path)
-                if parameters[iteration][0] == "-a":
+                if flag == "-a":
                     ReportGenerator(month_data).generate_averages_report_month()
-                else:
+                elif flag == "-c":
                     ReportGenerator(month_data).generate_report_charts()
         else:
             iteration = 0
-            path, parameters = re_take_input(allowed_parameters)
+            path, parameters = re_take_input()
             continue
 
         iteration += 1

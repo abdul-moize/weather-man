@@ -14,14 +14,11 @@ def is_year(year):
         (boolean):  True if year contains 4 digit year
                     False if year does not contain 4 digit year
     """
-    if isinstance(year, str):
-        regex = """
-        [1-9]       # starting character must be in range 1-9
-        \\d{3}\\b   # must end with 3 digits(0-9)
-        """
-        if re.match(regex, year, re.VERBOSE):
-            return True
-    return False
+    regex = """
+            [1-9]       # starting character must be in range 1-9
+            \\d{3}\\b   # must end with 3 digits(0-9)
+    """
+    return isinstance(year, str) and re.match(regex, year, re.VERBOSE)
 
 
 def is_month(month):
@@ -34,15 +31,12 @@ def is_month(month):
         (boolean):  True if month contains digits(1-9 or 01-12)
                     False if it does not contain digits(01-12 or 1-9)
     """
-    if isinstance(month, str):
-        regex = """
-        0?[1-9]\\b  # 0 is optional but must end with a digit(1-9)
-        |           # or
-        1[0-2]\\b   # start with 1 and end with digit(0-2)
-        """
-        if re.match(regex, month, re.VERBOSE):
-            return True
-    return None
+    regex = """
+           0?[1-9]\\b  # 0 is optional but must end with a digit(1-9)
+           |           # or
+           1[0-2]\\b   # start with 1 and end with digit(0-2)
+    """
+    return isinstance(month, str) and re.match(regex, month, re.VERBOSE)
 
 
 def is_year_month(year_month):
@@ -56,15 +50,12 @@ def is_year_month(year_month):
                     False if year_month is not in correct format
     """
 
-    if isinstance(year_month, str):
-        regex = """
-        [1-9]       # starting character must be in range 1-9
-        \\d{3}\\b   # must end with 3 digits(0-9)
-        /           # followed by a slash
-        0?[1-9]\\b  # 0 is optional but must end with a digit(1-9)
-        |           # or
-        1[0-2]\\b   # start with 1 and end with digit(0-2)
-        """
-        if re.match(regex, year_month, re.VERBOSE):
-            return True
-    return False
+    regex = """
+    [1-9]       # starting character must be in range 1-9
+    \\d{3}\\b   # must end with 3 digits(0-9)
+    /           # followed by a slash
+    0?[1-9]\\b  # 0 is optional but must end with a digit(1-9)
+    |           # or
+    1[0-2]\\b   # start with 1 and end with digit(0-2)
+    """
+    return isinstance(year_month, str) and re.match(regex, year_month, re.VERBOSE)

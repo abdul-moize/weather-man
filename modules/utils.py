@@ -7,12 +7,32 @@ from datetime import date
 
 from constants import (
     DATE_INDEX,
+    FULL_MONTH_NAME,
     MAX_HUMIDITY_INDEX,
     MAX_TEMPERATURE_INDEX,
     MEAN_HUMIDITY_INDEX,
     MIN_TEMPERATURE_INDEX,
+    validators,
 )
 from modules.validators import is_month, is_year, is_year_month
+
+
+def validate_command(flag, flag_input):
+    """
+
+    :param flag:
+    :param flag_input:
+    :return:
+    """
+    is_valid = False
+    if flag in validators:
+        if validators[flag](flag_input):
+            is_valid = True
+        else:
+            print(f"Invalid flag argument {flag_input}")
+    else:
+        print(f"Invalid flag {flag}")
+    return is_valid
 
 
 def parse_line(line):
@@ -54,9 +74,6 @@ def read_data(pattern, path):
     """
     files = pattern_search(pattern, path)
     if not files:
-        print(
-            f"We don't have information regarding the file {pattern} in the given path"
-        )
         yield []
     for i in files:
         with open(i, "r") as file:
@@ -151,7 +168,7 @@ def get_mean_humidity(line):
         return None
 
 
-def get_month_name(number, flag="%B"):
+def get_month_name(number, flag=FULL_MONTH_NAME):
     """
     Return the name of the month depending on the number
     Args:

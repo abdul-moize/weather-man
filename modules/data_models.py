@@ -1,7 +1,13 @@
 """
 This module contains classes for easy data management
 """
-from constants import HUMIDITY_UNIT, TEMPERATURE_UNIT, WEATHER_FILES_DIR
+from constants import (
+    FULL_MONTH_NAME,
+    HUMIDITY_UNIT,
+    SHORT_MONTH_NAME,
+    TEMPERATURE_UNIT,
+    WEATHER_FILES_DIR,
+)
 from modules.utils import (
     get_date,
     get_highest_temperature,
@@ -69,13 +75,13 @@ class MonthData:
         Returns:
             None
         """
-        pattern = f"{self.year}_{self.get_name('%b')}"
+        pattern = f"{self.year}_{self.get_name(SHORT_MONTH_NAME)}"
         month_data = next(read_data(pattern, self.path))
         for line in month_data:
             day_data = DayData(line)
             self.days_data.append(day_data)
 
-    def get_name(self, flag="%B"):
+    def get_name(self, flag=FULL_MONTH_NAME):
         """
         Returns month name
         Args:
@@ -90,11 +96,12 @@ class MonthData:
         """
         Returns the max humidity for the whole month with respective date
         Returns:
-            (int or None):  max humidity of the month
-                            Or
-                            None if no data exists for the month
+            (dict):  {
+                        'value'(int or None): max_humidity or None if no data,
+                        'date'(date):   date object
+                    }
         """
-        if len(self.days_data) == 0:
+        if not self.days_data:
             return {"value": None}
         max_humidity = {"value": -1000, "date": ""}
         for day_data in self.days_data:
@@ -109,11 +116,12 @@ class MonthData:
         """
         Returns the max highest temperature for the whole month with respective date
         Returns:
-            (int or None):  max highest_temperature of the month
-                            Or
-                            None if no data exists for the month
+            (dict):  {
+                        'value'(int or None): highest_temperature or None if no data,
+                        'date'(date):   date object
+                    }
         """
-        if len(self.days_data) == 0:
+        if not self.days_data:
             return {"value": None}
         max_temperature = {"value": -1000, "date": ""}
         for day_data in self.days_data:
@@ -126,11 +134,12 @@ class MonthData:
 
     def get_min_month_temperature(self):
         """
-        Returns the min highest temperature for the whole month with respective date
+        Returns the min lowest temperature for the whole month with respective date
         Returns:
-            (int or None):  min highest_temperature of the month
-                            Or
-                            None if no data exists for the month
+            (dict):  {
+                        'value'(int or None): lowest_temperature or None if no data,
+                        'date'(date):   date object
+                    }
         """
         if len(self.days_data) == 0:
             return {"value": None}
@@ -145,7 +154,7 @@ class MonthData:
 
     def get_max_month_temperature_avg(self):
         """
-        Returns the average highest_temperature
+        Returns the average highest_temperature rounded to 0 decimals
         Returns:
             (list or None): avg_highest_temperature(str),
                             Or
@@ -163,7 +172,7 @@ class MonthData:
 
     def get_min_month_temperature_avg(self):
         """
-        Returns the average lowest_temperature
+        Returns the average lowest_temperature rounded to 0 decimals
         Returns:
             (str or None):  avg_lowest_temperature
                             Or
@@ -181,7 +190,7 @@ class MonthData:
 
     def get_max_month_humidity_avg(self):
         """
-        Returns the average max humidity
+        Returns the average max humidity rounded to 0 decimals
         Returns:
             (str or None):  avg_max_humidity,
                             Or
@@ -192,7 +201,7 @@ class MonthData:
         sum_max_humidity = 0
         for day_data in self.days_data:
             sum_max_humidity += day_data.max_humidity or 0
-        return f"{round(sum_max_humidity / len(self.days_data))}{TEMPERATURE_UNIT}"
+        return f"{round(sum_max_humidity / len(self.days_data))}{HUMIDITY_UNIT}"
 
     def get_month_max_temperatures(self):
         """
@@ -275,7 +284,8 @@ class YearData:
         """
         for month in range(1, 13):
             month_data = MonthData(self.year, month, self.path)
-            self.months_data.append(month_data)
+            if month_data.days_data:
+                self.months_data.append(month_data)
 
     def get_max_year_temperature(self):
         """
@@ -312,7 +322,7 @@ class YearData:
         Args:
         Returns:
             (dict or None): dictionary containing min temperature and date
-                            max_humidity = {
+                            min_temperature = {
                                         "value" = min_temperature_with_unit(str),
                                         "date" = date(date)
                                     }
@@ -377,13 +387,20 @@ class ReportGenerator:
         Returns:
             None
         """
-        avg_max_temperature = self.month_object.get_max_month_temperature_avg()
-        avg_min_temperature = self.month_object.get_min_month_temperature_avg()
-        avg_max_humidity = self.month_object.get_max_month_humidity_avg()
-        averages = [avg_max_temperature, avg_min_temperature, avg_max_humidity]
-        starting_message = ["Highest", "Lowest", "Mean Humidity"]
-        for index, val in enumerate(starting_message):
-            print(f"Average {val}: {averages[index]}")
+        if not self.month_object.days_data:
+            print(
+                f"We don't have information regarding the weather of "
+                f"{self.month_object.get_name()}, {self.month_object.year} "
+                f"in the given path"
+            )
+        else:
+            avg_max_temperature = self.month_object.get_max_month_temperature_avg()
+            avg_min_temperature = self.month_object.get_min_month_temperature_avg()
+            avg_max_humidity = self.month_object.get_max_month_humidity_avg()
+            averages = [avg_max_temperature, avg_min_temperature, avg_max_humidity]
+            starting_message = ["Highest", "Lowest", "Mean Humidity"]
+            for index, val in enumerate(starting_message):
+                print(f"Average {val}: {averages[index]}")
 
     def generate_extremes_report(self):
         """
@@ -395,16 +412,23 @@ class ReportGenerator:
         Returns:
             None
         """
-        max_temperature = self.year_object.get_max_year_temperature()
-        min_temperature = self.year_object.get_min_year_temperature()
-        max_humidity = self.year_object.get_max_year_humidity()
-        maximums = [max_temperature, min_temperature, max_humidity]
-        starting_message = ["Highest", "Lowest", "Humidity"]
-        for index, dictionary in enumerate(maximums):
+        if not self.year_object.months_data:
             print(
-                f"{starting_message[index]}: {dictionary['value']} on "
-                f"{dictionary['date'].strftime('%B')}, {dictionary['date'].day}"
+                f"We don't have information regarding the weather of "
+                f"{self.year_object.year} in the given path"
             )
+        else:
+            max_temperature = self.year_object.get_max_year_temperature()
+            min_temperature = self.year_object.get_min_year_temperature()
+            max_humidity = self.year_object.get_max_year_humidity()
+            maximums = [max_temperature, min_temperature, max_humidity]
+            starting_message = ["Highest", "Lowest", "Humidity"]
+            for index, dictionary in enumerate(maximums):
+                print(
+                    f"{starting_message[index]}: {dictionary['value']} on "
+                    f"{dictionary['date'].strftime(FULL_MONTH_NAME)}, "
+                    f"{dictionary['date'].day}"
+                )
 
     def generate_report_charts(self):
         """
@@ -420,22 +444,29 @@ class ReportGenerator:
         Returns:
             None
         """
-        max_temperatures = self.month_object.get_month_max_temperatures()
-        min_temperatures = self.month_object.get_month_min_temperatures()
-        dates = self.month_object.get_month_dates()
-        extremes = [
-            [i, j, k] for i, j, k in zip(dates, max_temperatures, min_temperatures)
-        ]
-        year, month = dates[0].year, self.month_object.get_name()
-        print(f"{month} {year}")
-        for entry in extremes:
-            day = f"\33[0m{entry[0].day}"
-            if entry[2] is None or entry[1] is None:
-                continue
-            red_plus = f"\33[91m{'+' * entry[1]}"
-            blue_plus = f"\33[94m{'+' * entry[2]}"
-            report_line = (
-                f"{day} {blue_plus}{red_plus} "
-                f"\33[0m{entry[2]}{TEMPERATURE_UNIT}-{entry[1]}{TEMPERATURE_UNIT}"
+        if not self.month_object.days_data:
+            print(
+                f"We don't have information regarding the weather of "
+                f"{self.month_object.get_name()}, {self.month_object.year}"
+                f" in the given path"
             )
-            print(report_line)
+        else:
+            max_temperatures = self.month_object.get_month_max_temperatures()
+            min_temperatures = self.month_object.get_month_min_temperatures()
+            dates = self.month_object.get_month_dates()
+            extremes = [
+                [i, j, k] for i, j, k in zip(dates, max_temperatures, min_temperatures)
+            ]
+            year, month = dates[0].year, self.month_object.get_name()
+            print(f"{month} {year}")
+            for entry in extremes:
+                day = f"\33[0m{entry[0].day}"
+                if entry[2] is None or entry[1] is None:
+                    continue
+                red_plus = f"\33[91m{'+' * entry[1]}"
+                blue_plus = f"\33[94m{'+' * entry[2]}"
+                report_line = (
+                    f"{day} {blue_plus}{red_plus} "
+                    f"\33[0m{entry[2]}{TEMPERATURE_UNIT}-{entry[1]}{TEMPERATURE_UNIT}"
+                )
+                print(report_line)
