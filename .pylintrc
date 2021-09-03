@@ -1,4 +1,6 @@
 [MESSAGES CONTROL]
-disable=F0001
+disable= too-few-public-methods,
 [MASTER]
 ignore=venv/, .idea/
+[SIMILARITIES]
+ignore-imports=yes
