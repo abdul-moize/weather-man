@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=F0001, R0903
+disable= too-few-public-methods,
 [MASTER]
 ignore=venv/, .idea/
 [SIMILARITIES]

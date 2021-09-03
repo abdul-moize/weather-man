@@ -2,36 +2,70 @@
 This module contains functions that are used frequently
 at multiple places in the application
 """
+# pylint:disable= global-statement
 import glob
 from datetime import date
 
-from constants import (
-    DATE_INDEX,
-    FULL_MONTH_NAME,
-    MAX_HUMIDITY_INDEX,
-    MAX_TEMPERATURE_INDEX,
-    MEAN_HUMIDITY_INDEX,
-    MIN_TEMPERATURE_INDEX,
-    validators,
-)
+from constants import FULL_MONTH_NAME, validators
 from modules.validators import is_month, is_year, is_year_month
+
+DATE_INDEX = None
+MAX_TEMPERATURE_INDEX = None
+MIN_TEMPERATURE_INDEX = None
+MAX_HUMIDITY_INDEX = None
+MEAN_HUMIDITY_INDEX = None
+
+
+def initialize_indexes(path):
+    """
+    Initializes the indexes from a file in the path
+    Args:
+        path(str): Value containing path to weather files like 'weatherfiles/'
+    Returns:
+        (int or None):  0 if indexes are initialized
+                        Or
+                        None if no files exist in the path
+    """
+    files = glob.glob(f"{path}*")
+    if not files:
+        return None
+    with open(files[0], "r") as file:
+        first_line = file.readline()
+    fields = first_line.split("\n")[0].split(",")
+    global DATE_INDEX, MIN_TEMPERATURE_INDEX, MAX_TEMPERATURE_INDEX
+    global MAX_HUMIDITY_INDEX, MEAN_HUMIDITY_INDEX
+    for index, field in enumerate(fields):
+        if field == "PKT":
+            DATE_INDEX = index
+        elif field == "Max TemperatureC":
+            MAX_TEMPERATURE_INDEX = index
+        elif field == "Min TemperatureC":
+            MIN_TEMPERATURE_INDEX = index
+        elif field == "Max Humidity":
+            MAX_HUMIDITY_INDEX = index
+        elif field == " Mean Humidity":
+            MEAN_HUMIDITY_INDEX = index
+    return 0
 
 
 def validate_command(flag, flag_input):
     """
-
-    :param flag:
-    :param flag_input:
-    :return:
+    Validates the flag and the flag arguments by using the
+    dictionary validators in constants.py
+    Args:
+        flag(str): Value containing flag e.g '-e', '-a', '-c'
+        flag_input(str): Value containing the year or year_month e.g '2006', '2006/6'
+    Returns:
+        None
     """
     is_valid = False
     if flag in validators:
         if validators[flag](flag_input):
             is_valid = True
         else:
-            print(f"Invalid flag argument {flag_input}")
+            print(f"Invalid flag argument '{flag_input}' for flag '{flag}'")
     else:
-        print(f"Invalid flag {flag}")
+        print(f"Invalid flag '{flag}'")
     return is_valid
 
 
